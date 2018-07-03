@@ -19,5 +19,3 @@ try{
 }
 
 $res=$DB->table("user")->where("id>?",[0])->count();
-var_dump($res);
-var_dump($DB->lastSql());
