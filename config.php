@@ -24,16 +24,16 @@ return array(
     "redis"     =>  array(
         "host"    =>  "127.0.0.1",
         "port"    =>  6379,
-        "pwd"     =>  "test",
+        "pwd"     =>  "1993918py",
         "db_index"=>  3
     ),
     //mysql配置
     "mysql"     =>  array(
         "host"       =>  "127.0.0.1",
         "port"       =>  3306,
-        "user"       =>  "test",
-        "pwd"        =>  "test",
-        "database"   =>  "database",
+        "user"       =>  "root",
+        "pwd"        =>  "1993918py",
+        "database"   =>  "im",
         "charset"    =>  "utf8"
     ),
     //聊天配置
