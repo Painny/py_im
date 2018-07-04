@@ -39,6 +39,9 @@ class DataBase{
 
     public function field($field)
     {
+        if(is_array($field)){
+            $field=implode(",",$field);
+        }
         $this->field=" ".$field." ";
         return $this;
     }
@@ -69,7 +72,7 @@ class DataBase{
         $this->limit(1);
         $result=$this->get();
         if($result===false){
-            return false;
+            return [];
         }
         return count($result)?$result[0]:[];
     }
@@ -79,7 +82,7 @@ class DataBase{
         $this->makeSql();
         $result=$this->execute();
         if($result===false){
-            return false;
+            return [];
         }
         return $result;
     }
@@ -90,7 +93,7 @@ class DataBase{
         $this->makeSql();
         $result=$this->execute();
         if($result===false){
-            return false;
+            return 0;
         }
         return $result[0]["count"];
     }
@@ -138,7 +141,7 @@ class DataBase{
         $this->table=null;
         $this->whereStr="";
         $this->whereValue=[];
-        $this->field="*";
+        $this->field=" * ";
         $this->order="";
         $this->limit="";
         $this->join="";

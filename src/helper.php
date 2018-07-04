@@ -72,12 +72,13 @@ function decodeJwt($jwt)
 }
 
 //生成响应数据
-function makeMsg($type,$data,$code)
+function makeMsg($type,$data,$code=0,$msg="")
 {
     $msg=array(
         "type"  =>  $type,
         "data"  =>  $data,
-        "code"  =>  $code?$code:0
+        "code"  =>  $code?$code:0,
+        "msg"   =>  $msg?$msg:"success"
     );
     return json_encode($msg);
 }

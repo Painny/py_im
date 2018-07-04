@@ -22,19 +22,19 @@ return array(
     ),
     //redis配置
     "redis"     =>  array(
-        "redis_host"    =>  "127.0.0.1",
-        "redis_port"    =>  6379,
-        "redis_pwd"     =>  "test",
-        "redis_index"   =>  1
+        "host"    =>  "127.0.0.1",
+        "port"    =>  6379,
+        "pwd"     =>  "test",
+        "db_index"=>  3
     ),
     //mysql配置
     "mysql"     =>  array(
-        "db_host"       =>  "127.0.0.1",
-        "db_port"       =>  3306,
-        "db_user"       =>  "test",
-        "db_pwd"        =>  "test",
-        "db_database"   =>  "database",
-        "db_charset"    =>  "utf8"
+        "host"       =>  "127.0.0.1",
+        "port"       =>  3306,
+        "user"       =>  "test",
+        "pwd"        =>  "test",
+        "database"   =>  "database",
+        "charset"    =>  "utf8"
     ),
     //聊天配置
     "im"        =>  array(

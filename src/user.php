@@ -31,9 +31,11 @@ class User{
         );
     }
 
-    public function getFriends($db)
+    public function getFriends(DataBase $db)
     {
-
+        $data=$db->table("friend")->join("user","friendId","=","user.id")->
+            field("user.id as id,nickname,icon")->where("userId=? and state=0",[$this->id])->get();
+        return $data;
     }
 
     public function getGroups($db)

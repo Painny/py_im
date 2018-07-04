@@ -5,6 +5,10 @@
  * Date: 2018/7/3
  * Time: 15:00
  */
+/**
+ * 所有在线用户: online_user(hash key) uid => $user实例
+ * 班级已登录成员: class_{id}(set key)  [fd1,fd3]集合
+ */
 
 //主服务文件
 class Im{
@@ -17,6 +21,8 @@ class Im{
             $this->server->set($options);
         }
 
+        $this->server->on("start",array($this,"onStart"));
+        $this->server->on("workerStart",array($this,"onWorkerStart"));
         $this->server->on("open",array($this,"onOpen"));
         $this->server->on("message",array($this,"onMessage"));
         $this->server->on("task",array($this,"onTask"));
@@ -24,6 +30,31 @@ class Im{
         $this->server->on("close",array($this,"onClose"));
 
         $this->server->start();
+    }
+
+    private function onStart(){
+        $redis=new Redis();
+        $redis->connect(config("redis.host"),config("redis.port"));
+        $redis->auth(config("redis.pwd"));
+        $redis->select(config("redis.db_index"));
+        $redis->flushDB();
+    }
+
+    private function onWorkerStart(swoole_server $serv, $worker_id)
+    {
+        require_once "./helper.php";
+        require_once "./db.php";
+        require_once "./user.php";
+        //每个工作进程分配单独数据库和redis连接
+        $dsn='mysql:dbname='.config("mysql.database").';host='.config("mysql.host").';port='.
+            config("mysql.port").';charset='.config("mysql.charset");
+        $serv->db=new DataBase($dsn,config("mysql.user"),config("mysql.pwd"));
+
+        $redis=new Redis();
+        $redis->connect(config("redis.host"),config("redis.port"));
+        $redis->auth(config("redis.pwd"));
+        $redis->select(config("redis.db_index"));
+        $serv->redis=$redis;
     }
 
     private function onOpen(swoole_websocket_server $serv, swoole_http_request $req)
@@ -34,7 +65,10 @@ class Im{
             $serv->close($req->fd);
             return;
         }
+        //返回基本信息，好友列表，群列表
         $user=new User($req->fd,$data);
+        $response=array("info"=>$user->info(),"friends"=>$user->getFriends($serv->db));
+        $this->pushOne($serv,$req->fd,$response);
     }
 
     private function onMessage(swoole_server $serv, swoole_websocket_frame $frame)
@@ -52,9 +86,16 @@ class Im{
 
     }
 
-    private function onClose(swoole_server $server, $fd, $reactorId)
+    private function onClose(swoole_server $serv, $fd, $reactorId)
     {
 
+    }
+
+    private function pushOne(swoole_server $serv,$fd,$type,$data)
+    {
+        $data=makeMsg($type,$data);
+        $serv->push($fd,$data);
+        return;
     }
 
 }
