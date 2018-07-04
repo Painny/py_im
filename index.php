@@ -9,4 +9,4 @@
 //启动文件
 require_once "./src/server.php";
 
-new Im();
+new Im(config("host"),config("port"));
