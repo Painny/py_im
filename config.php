@@ -6,7 +6,7 @@
  * Time: 14:53
  */
 
-$CONFIG= array(
+return array(
     //监听地址
     "host"          =>  "0.0.0.0",
     "port"          =>  9501,
