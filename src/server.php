@@ -34,28 +34,38 @@ class Im{
 
     public function onStart()
     {
-        $redis=new Redis();
-        $redis->connect(config("redis.host"),config("redis.port"));
-        $redis->auth(config("redis.pwd"));
-        $redis->select(config("redis.db_index"));
-        $redis->flushDB();
+        try{
+            $redis=new Redis();
+            $redis->connect(config("redis.host"),config("redis.port"));
+            $redis->auth(config("redis.pwd"));
+            $redis->select(config("redis.db_index"));
+            $redis->flushDB();
+        }catch (Exception $e){
+            echo $e->getMessage();exit;
+        }
+
     }
 
     public function onWorkerStart(swoole_server $serv, $worker_id)
     {
-        require_once __DIR__."/helper.php";
-        require_once __DIR__."/db.php";
-        require_once __DIR__."/user.php";
-        //每个工作进程分配单独数据库和redis连接
-        $dsn='mysql:dbname='.config("mysql.database").';host='.config("mysql.host").';port='.
-            config("mysql.port").';charset='.config("mysql.charset");
-        $serv->db=new DataBase($dsn,config("mysql.user"),config("mysql.pwd"));
+        try{
+            require_once __DIR__."/helper.php";
+            require_once __DIR__."/db.php";
+            require_once __DIR__."/user.php";
+            //每个工作进程分配单独数据库和redis连接
+            $dsn='mysql:dbname='.config("mysql.database").';host='.config("mysql.host").';port='.
+                config("mysql.port").';charset='.config("mysql.charset");
+            $serv->db=new DataBase($dsn,config("mysql.user"),config("mysql.pwd"));
 
-        $redis=new Redis();
-        $redis->connect(config("redis.host"),config("redis.port"));
-        $redis->auth(config("redis.pwd"));
-        $redis->select(config("redis.db_index"));
-        $serv->redis=$redis;
+            $redis=new Redis();
+            $redis->connect(config("redis.host"),config("redis.port"));
+            $redis->auth(config("redis.pwd"));
+            $redis->select(config("redis.db_index"));
+            $serv->redis=$redis;
+        }catch (Exception $e){
+            echo $e->getMessage();exit;
+        }
+
     }
 
     public function onOpen(swoole_websocket_server $serv, swoole_http_request $req)
