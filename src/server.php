@@ -49,10 +49,10 @@ class Im{
     public function onWorkerStart(swoole_server $serv, $worker_id)
     {
         try{
-            require_once __DIR__."/helper.php";
-            require_once __DIR__."/db.php";
-            require_once __DIR__."/user.php";
-            config("mysql.host");
+//            require_once __DIR__."/helper.php";
+//            require_once __DIR__."/db.php";
+//            require_once __DIR__."/user.php";
+//            config("mysql.host");
             //每个工作进程分配单独数据库和redis连接
 //            $dsn='mysql:dbname='.config("mysql.database").';host='.config("mysql.host").';port='.
 //                config("mysql.port").';charset='.config("mysql.charset");
