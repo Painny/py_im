@@ -73,7 +73,6 @@ class Im{
     {
         $get=$req->get;
         $data=decodeJwt($get["token"]);
-        var_dump($data);
         if(!$data){
             $serv->close($req->fd);
             return;
@@ -81,7 +80,7 @@ class Im{
         //返回基本信息，好友列表，群列表
         $user=new User($req->fd,$data);
         $response=array("info"=>$user->info(),"friends"=>$user->getFriends($serv->db));
-        $this->pushOne($serv,$req->fd,$response);
+        $this->pushOne($serv,$req->fd,"connected",$response);
     }
 
     public function onMessage(swoole_server $serv, swoole_websocket_frame $frame)
