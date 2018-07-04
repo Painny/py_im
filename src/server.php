@@ -80,13 +80,15 @@ class Im{
         $get=$req->get;
         $data=decodeJwt($get["token"]);
         if(!$data){
+            $this->push($serv,[$req->fd],makeMsg("error",null,1,"缺少参数"));
             $serv->close($req->fd);
             return;
         }
         //返回基本信息，好友列表，群列表
         $user=new User($req->fd,$data);
         $response=array("info"=>$user->info(),"friends"=>$user->getFriends($serv->db),"groups"=>$user->getGroups($serv->db));
-        $this->pushOne($serv,$req->fd,"connected",$response);
+        $response=makeMsg("connect",$response);
+        $this->push($serv,[$req->fd],$response);
 
         //暂存用户实例
         $user->save($serv->redis);
@@ -99,7 +101,13 @@ class Im{
 
     public function onTask(swoole_server $serv,$task_id,$src_worker_id,$data)
     {
-
+        if(!is_array($data) || isset($data["type"])){
+            return;
+        }
+        switch ($data["type"]){
+            case "push":
+                break;
+        }
     }
 
     public function onFinish(swoole_server $serv, $task_id, $data)
@@ -117,11 +125,17 @@ class Im{
         $serv->redis->hDel("fd_user",$fd);
     }
 
-    public function pushOne(swoole_server $serv,$fd,$type,$data)
+    private function push(swoole_server $serv,$fds,$msg)
     {
-        $data=makeMsg($type,$data);
-        $serv->push($fd,$data);
-        return;
+        if(count($fds)==1){
+            $serv->push($fds[0],$msg);
+            return;
+        }
+        $data=array(
+            "type"  =>  "push",
+            "data"  =>  $msg
+        );
+        $serv->task($data);
     }
 
 }
