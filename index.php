@@ -10,4 +10,4 @@
 require_once __DIR__."/src/server.php";
 require_once __DIR__."/src/helper.php";
 
-new Im(config("host"),config("port"));
+new Im("0.0.0.0","9501");
