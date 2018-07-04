@@ -7,7 +7,7 @@
  */
 
 //启动文件
-require_once "./src/server.php";
-require_once "./src/helper.php";
+require_once __DIR__."/src/server.php";
+require_once __DIR__."/src/helper.php";
 
 new Im(config("host"),config("port"));

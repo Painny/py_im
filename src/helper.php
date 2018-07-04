@@ -9,7 +9,7 @@
 //读取配置(支持多级读取)
 function config($key)
 {
-    $config=require_once "../config.php";
+    $config=require_once __DIR__."/../config.php";
     if(strpos($key,".")===false){
         return $config[$key];
     }
