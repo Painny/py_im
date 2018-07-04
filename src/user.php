@@ -55,7 +55,7 @@ class User{
 
     public function save(Redis $redis)
     {
-        $redis->hSet("online_user",$this->id,swoole_pack($this));
+        $redis->hSet("online_user",$this->id,swoole_serialize::pack($this));
         $redis->hSet("fd_user",$this->fd,$this->id);
     }
 
@@ -63,7 +63,7 @@ class User{
     {
         $user=$redis->hGet("online_user",$id);
         if($user){
-            $user=swoole_unpack($user);
+            $user=swoole_serialize::unpack($user);
         }
         return $user;
     }
@@ -76,7 +76,7 @@ class User{
         }
         $user=$redis->hGet("online_user",$id);
         if($user){
-            $user=swoole_unpack($user);
+            $user=swoole_serialize::unpack($user);
         }
         return $user;
     }
