@@ -32,7 +32,8 @@ class Im{
         $this->server->start();
     }
 
-    private function onStart(){
+    public function onStart()
+    {
         $redis=new Redis();
         $redis->connect(config("redis.host"),config("redis.port"));
         $redis->auth(config("redis.pwd"));
@@ -40,7 +41,7 @@ class Im{
         $redis->flushDB();
     }
 
-    private function onWorkerStart(swoole_server $serv, $worker_id)
+    public function onWorkerStart(swoole_server $serv, $worker_id)
     {
         require_once __DIR__."/helper.php";
         require_once __DIR__."/db.php";
@@ -57,7 +58,7 @@ class Im{
         $serv->redis=$redis;
     }
 
-    private function onOpen(swoole_websocket_server $serv, swoole_http_request $req)
+    public function onOpen(swoole_websocket_server $serv, swoole_http_request $req)
     {
         $get=$req->get;
         $data=decodeJwt($get["token"]);
@@ -71,27 +72,27 @@ class Im{
         $this->pushOne($serv,$req->fd,$response);
     }
 
-    private function onMessage(swoole_server $serv, swoole_websocket_frame $frame)
+    public function onMessage(swoole_server $serv, swoole_websocket_frame $frame)
     {
 
     }
 
-    private function onTask(swoole_server $serv,$task_id,$src_worker_id,$data)
+    public function onTask(swoole_server $serv,$task_id,$src_worker_id,$data)
     {
 
     }
 
-    private function onFinish(swoole_server $serv, $task_id, $data)
+    public function onFinish(swoole_server $serv, $task_id, $data)
     {
 
     }
 
-    private function onClose(swoole_server $serv, $fd, $reactorId)
+    public function onClose(swoole_server $serv, $fd, $reactorId)
     {
 
     }
 
-    private function pushOne(swoole_server $serv,$fd,$type,$data)
+    public function pushOne(swoole_server $serv,$fd,$type,$data)
     {
         $data=makeMsg($type,$data);
         $serv->push($fd,$data);
