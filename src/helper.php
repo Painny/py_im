@@ -32,7 +32,7 @@ function makeJwt($info)
     );
     $playload=$info;
     $playload["iss"]="py_im";
-    $playload["exp"]=time();
+    $playload["exp"]=time()+config("im.jwt_exp");
 
     $encode_str=base64_encode(json_encode($header)).".".base64_encode(json_encode($playload));
     $signature=sha1($encode_str.config("im.jwt_salt"));
