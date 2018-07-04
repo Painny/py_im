@@ -9,12 +9,13 @@
 //读取配置(支持多级读取)
 function config($key)
 {
-    $config=require_once __DIR__."/../config.php";
-    var_dump($config);
+    require_once __DIR__."/../config.php";
+    global $CONFIG;
+    var_dump($CONFIG);
     if(strpos($key,".")===false){
-        return $config[$key];
+        return $CONFIG[$key];
     }
-    $value=$config;
+    $value=$CONFIG;
     foreach (explode(".",$key) as $item){
         $value=$value[$item];
     }
