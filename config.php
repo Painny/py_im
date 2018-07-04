@@ -17,8 +17,8 @@ return array(
         "max_conn"      =>  200,
         "daemonize"     =>  false,
         "dispatch_mode" =>  5,
-        "log_file"      =>  "/var/log/test-im/im.log",
-        "log_level"     =>  4
+//        "log_file"      =>  "/var/log/test-im/im.log",
+//        "log_level"     =>  4
     ),
     //redis配置
     "redis"     =>  array(

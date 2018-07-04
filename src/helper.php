@@ -85,3 +85,4 @@ function makeMsg($type,$data,$code=0,$msg="")
     );
     return json_encode($msg);
 }
+
