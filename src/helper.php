@@ -10,6 +10,7 @@
 function config($key)
 {
     if(!isset($CONFIG)){
+        echo 1;
         $CONFIG=require_once __DIR__."/../config.php";
     }
     var_dump($CONFIG);
