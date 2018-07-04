@@ -11,6 +11,8 @@ class User{
     private $fd;        //连接标识
     private $nickname;  //昵称
     private $icon;      //头像
+    private $friends;   //好友列表
+    private $groups;    //所在的群
 
     public function __construct($fd,$data)
     {
@@ -33,12 +35,15 @@ class User{
 
     public function getFriends(DataBase $db)
     {
-        $data=$db->table("friend")->join("user","friendId","=","user.id")->
+        if(isset($this->friends)){
+            return $this->friends;
+        }
+        $this->friends=$db->table("friend")->join("user","friendId","=","id")->
             field("user.id as id,nickname,icon")->where("userId=? and state=0",[$this->id])->get();
-        return $data;
+        return $this->friends;
     }
 
-    public function getGroups($db)
+    public function getGroups(DataBase $db)
     {
 
     }

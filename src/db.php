@@ -63,7 +63,9 @@ class DataBase{
 
     public function join($table,$hostField,$condition,$joinField,$type="INNER")
     {
-        $this->join=" ".$type." JOIN ".$table." ON ".$this->table.".".$hostField.$condition.$table.".".$joinField." ";
+        $joinCondition=strpos($hostField,".")===false?$this->table.".".$hostField:$hostField;
+        $joinCondition=$joinCondition.$condition.(strpos($joinField,".")===false?$table.".".$joinField:$joinField);
+        $this->join=" ".$type." JOIN ".$table." ON ".$joinCondition." ";
         return $this;
     }
 
