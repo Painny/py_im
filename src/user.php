@@ -49,7 +49,7 @@ class User{
             return $this->groups;
         }
         $this->groups=$db->table("groups")->join("group_user","id","=","groupId")->
-            field("groups.id as id,name,userCount")->where("userId=? and state=0")->get();
+            field("groups.id as id,name,userCount")->where("userId=? and state=0",[$this->id])->get();
         return $this->groups;
     }
 
