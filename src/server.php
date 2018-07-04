@@ -62,12 +62,14 @@ class Im{
             //每个工作进程分配单独数据库和redis连接
             $dsn='mysql:dbname='.config("mysql.database").';host='.config("mysql.host").';port='.
                 config("mysql.port").';charset='.config("mysql.charset");
+
             $serv->db=new DataBase($dsn,config("mysql.user"),config("mysql.pwd"));
 
             $redis=new Redis();
             $redis->connect(config("redis.host"),config("redis.port"));
             $redis->auth(config("redis.pwd"));
             $redis->select(config("redis.db_index"));
+
             $serv->redis=$redis;
         }catch (Exception $e){
             echo $e->getMessage();exit;
@@ -84,6 +86,7 @@ class Im{
             $serv->close($req->fd);
             return;
         }
+
         //返回基本信息，好友列表，群列表
         $user=new User($req->fd,$data);
         $response=array("info"=>$user->info(),"friends"=>$user->getFriends($serv->db),"groups"=>$user->getGroups($serv->db));
@@ -137,5 +140,6 @@ class Im{
         );
         $serv->task($data);
     }
+
 
 }
