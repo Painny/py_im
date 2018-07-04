@@ -50,6 +50,7 @@ class User{
         }
         $this->groups=$db->table("groups")->join("group_user","id","=","groupId")->
             field("groups.id as id,name,userCount")->where("userId=? and state=0")->get();
+        return $this->groups;
     }
 
 
