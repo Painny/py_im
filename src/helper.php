@@ -11,7 +11,6 @@ function config($key)
 {
     static $CONFIG;
     if(!isset($CONFIG)){
-        echo 1;
         $CONFIG=require_once __DIR__."/../config.php";
     }
     if(strpos($key,".")===false){
