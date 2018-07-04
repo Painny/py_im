@@ -45,7 +45,11 @@ class User{
 
     public function getGroups(DataBase $db)
     {
-
+        if(isset($this->groups)){
+            return $this->groups;
+        }
+        $this->groups=$db->table("groups")->join("group_user","id","=","groupId")->
+            field("groups.id as id,name,userCount")->where("userId=? and state=0")->get();
     }
 
 
