@@ -73,6 +73,7 @@ class Im{
     {
         $get=$req->get;
         $data=decodeJwt($get["token"]);
+        var_dump($data);
         if(!$data){
             $serv->close($req->fd);
             return;
