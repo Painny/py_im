@@ -6,8 +6,14 @@
  * Time: 15:00
  */
 /**
- * 所有在线用户: online_user(hash key) uid => $user实例
- * 班级已登录成员: class_{id}(set key)  [fd1,fd3]集合
+ * 所有在线用户: online_user(hash key) id => $user实例
+ * 用户id和fd映射关系： fd_user(hash key) fd => id
+ * 群组已登录成员: group_{id}(set key)  [fd1,fd3]集合
+ *
+ *
+ *
+ *
+ *
  */
 
 //主服务文件
@@ -81,6 +87,9 @@ class Im{
         $user=new User($req->fd,$data);
         $response=array("info"=>$user->info(),"friends"=>$user->getFriends($serv->db),"groups"=>$user->getGroups($serv->db));
         $this->pushOne($serv,$req->fd,"connected",$response);
+
+        //暂存用户实例
+        $user->save();
     }
 
     public function onMessage(swoole_server $serv, swoole_websocket_frame $frame)
@@ -100,7 +109,12 @@ class Im{
 
     public function onClose(swoole_server $serv, $fd, $reactorId)
     {
-
+        $user=User::getByFd($serv->redis,$fd);
+        if($user){
+            $serv->redis->hDel("online_user",($user->info())["id"]);
+            unset($user);
+        }
+        $serv->redis->hDel("fd_user",$fd);
     }
 
     public function pushOne(swoole_server $serv,$fd,$type,$data)

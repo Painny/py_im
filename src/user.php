@@ -53,5 +53,35 @@ class User{
         return $this->groups;
     }
 
+    public function save(Redis $redis)
+    {
+        $redis->hSet("online_user",$this->id,swoole_pack($this));
+        $redis->hSet("fd_user",$this->fd,$this->id);
+    }
+
+    static public function getById(Redis $redis,$id)
+    {
+        $user=$redis->hGet("online_user",$id);
+        if($user){
+            $user=swoole_unpack($user);
+        }
+        return $user;
+    }
+
+    static public function getByFd(Redis $redis,$fd)
+    {
+        $id=$redis->hGet("fd_user",$fd);
+        if(!$id){
+            return false;
+        }
+        $user=$redis->hGet("online_user",$id);
+        if($user){
+            $user=swoole_unpack($user);
+        }
+        return $user;
+    }
+
+
+
 
 }
