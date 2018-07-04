@@ -10,6 +10,7 @@
 function config($key)
 {
     $config=require_once __DIR__."/../config.php";
+    var_dump($config);
     if(strpos($key,".")===false){
         return $config[$key];
     }

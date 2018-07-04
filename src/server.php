@@ -34,15 +34,15 @@ class Im{
 
     public function onStart()
     {
-        try{
-            $redis=new Redis();
-            $redis->connect(config("redis.host"),config("redis.port"));
-            $redis->auth(config("redis.pwd"));
-            $redis->select(config("redis.db_index"));
-            $redis->flushDB();
-        }catch (Exception $e){
-            echo $e->getMessage();exit;
-        }
+//        try{
+//            $redis=new Redis();
+//            $redis->connect(config("redis.host"),config("redis.port"));
+//            $redis->auth(config("redis.pwd"));
+//            $redis->select(config("redis.db_index"));
+//            $redis->flushDB();
+//        }catch (Exception $e){
+//            echo $e->getMessage();exit;
+//        }
 
     }
 
@@ -52,10 +52,10 @@ class Im{
             require_once __DIR__."/helper.php";
             require_once __DIR__."/db.php";
             require_once __DIR__."/user.php";
+            config("mysql.host");
             //每个工作进程分配单独数据库和redis连接
-            $dsn='mysql:dbname='.config("mysql.database").';host='.config("mysql.host").';port='.
-                config("mysql.port").';charset='.config("mysql.charset");
-            echo $dsn;
+//            $dsn='mysql:dbname='.config("mysql.database").';host='.config("mysql.host").';port='.
+//                config("mysql.port").';charset='.config("mysql.charset");
 //            $serv->db=new DataBase($dsn,config("mysql.user"),config("mysql.pwd"));
 //
 //            $redis=new Redis();
