@@ -14,7 +14,6 @@ function config($key)
         echo 1;
         $CONFIG=require_once __DIR__."/../config.php";
     }
-    var_dump($CONFIG);
     if(strpos($key,".")===false){
         return $CONFIG[$key];
     }
