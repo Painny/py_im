@@ -146,11 +146,9 @@ class Im{
 
     public function onTask(swoole_server $serv,$task_id,$src_worker_id,$data)
     {
-        var_dump($data);
-        if(!is_array($data) || isset($data["type"])){
+        if(!is_array($data) || !isset($data["type"])){
             return;
         }
-        echo $data["type"];
         switch ($data["type"]){
             case "push":  //推送群消息
                 $this->pushTask($serv,$data["data"]);
