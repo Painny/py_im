@@ -117,7 +117,7 @@ class Im{
         switch ($msg["type"]){
             case "msg":
                 if($msg["data"]["type"]=="user"){  //单人消息
-                    $user=User::getByFd($fromFd);
+                    $user=User::getByFd($serv->redis,$fromFd);
                     if(!$user){
                         $errInfo=makeMsg("error",null,1,"发送者用户实例不存在");
                         $this->push($serv,[$fromFd],$errInfo);
