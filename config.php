@@ -14,7 +14,7 @@ return array(
     "swoole"    =>  array(
         "reactor_num"       =>  2,
         "worker_num"        =>  4,
-        "task_worker_num "  =>  4,
+        "task_worker_num"  =>  4,
         "max_conn"          =>  200,
         "daemonize"         =>  false,
         "dispatch_mode"     =>  5,
