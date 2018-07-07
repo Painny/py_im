@@ -100,6 +100,17 @@ class User{
         return $redis->hGet("online_user",$id)?true:false;
     }
 
+    //暂存离线消息
+    public function offlineMsg(DataBase $db,$toUserId,$msg)
+    {
+        $db->table("offline_msg")->insert(array(
+            "fromUser"  =>  $this->id,
+            "toUser"    =>  $toUserId,
+            "msg"       =>  $msg,
+            "time"      =>  time()
+        ));
+    }
+
 
 
 
