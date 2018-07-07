@@ -117,10 +117,10 @@ class User{
         $data=array();
         foreach ($msg as $key => $val){
             $data[$key]=array(
-                "from"  =>  $val->fromUser,
+                "from"  =>  $val["fromUser"],
                 "type"  =>  "user",
-                "msg"   =>  $val->msg,
-                "time"  =>  date("Y/m/d H:i",$val->time)
+                "msg"   =>  $val["msg"],
+                "time"  =>  date("Y/m/d H:i",$val["time"])
             );
         }
         return $data;
