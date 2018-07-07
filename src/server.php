@@ -152,12 +152,15 @@ class Im{
         }
         switch ($data["type"]){
             case "push":  //推送群消息
-                $this->pushTask($serv,$data["data"]);break;
+                $this->pushTask($serv,$data["data"]);
+                break;
             case "initGroups":  //初始化所有群
+                echo 1111;
                 foreach (Group::allGroups() as $id){
                     $group=new Group($serv->db,$id);
                     $group->save($serv->redis);
                 }
+                break;
             default:
         }
     }
