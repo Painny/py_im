@@ -133,7 +133,6 @@ class User{
         foreach ($this->getGroups($db) as $val){
             $group=new Group($db,$val["id"]);
             $group->online($redis,$this->fd);
-            echo count($group->onlineFd());
         }
     }
 

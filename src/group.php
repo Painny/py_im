@@ -70,6 +70,7 @@ class Group{
     public function online(Redis $redis,$fd)
     {
         array_push($this->onlineFd,$fd);
+        var_dump($this->onlineFd);
         $this->save($redis);
     }
 
