@@ -9,10 +9,18 @@
  * 所有在线用户: online_user(hash key) id => $user实例
  * 用户id和fd映射关系： fd_user(hash key) fd => id
  * 群组已登录成员: group_{id}(set key)  [fd1,fd3]集合
+ *********************************************************************
+ *推送消息格式:["type":"msg","data":"xx","code":0,"msg":"xx"]
  *
+ *单人聊天消息格式:type => msg, data => ["from":user_id,"type":"user","msg":"xx","time":"2018/07/06 16:00"]
+ *群组连天消息格式:type => msg, data => ["from":group_id,"type":"group","user":user_id,"msg":"xx","time":"2018/07/06 16:00"]
  *
+ * 连接成功消息格式:type => connect, data => ["info":自己信息,"friends":好友列表,"groups":群列表]
+ * ********************************************************************
+ * 接受消息格式:["type":"msg","data":"xx"]
  *
- *
+ * 聊天消息格式:type => msg, data => ["type":"user|group","to":user_id|group_id,"msg":"xx"]
+ * 操作请求格式:type => act, data => ["act":"xx","data":"xx"]
  *
  */
 
@@ -99,6 +107,32 @@ class Im{
 
     public function onMessage(swoole_server $serv, swoole_websocket_frame $frame)
     {
+        $fromFd=$frame->fd;
+        $msg=json_decode($frame->data,true);
+        if(!isset($msg["type"]) || !isset($msg["data"])){
+            $errInfo=makeMsg("error",null,1,"缺少参数");
+            $this->push($serv,[$fromFd],$errInfo);
+            return;
+        }
+        switch ($msg["type"]){
+            case "msg":
+                if($msg["data"]["type"]=="user"){  //单人消息
+                    $user=User::getByFd($fromFd);
+                    if(!$user){
+                        $errInfo=makeMsg("error",null,1,"发送者用户实例不存在");
+                        $this->push($serv,[$fromFd],$errInfo);
+                        return;
+                    }
+                    if(User::isOnline($serv->redis,$user)){
+                        $response=makeMsg("msg",$user->talkMsg($msg["data"]["msg"]));
+                        $this->push($serv,[($user->info())["fd"]],$response);
+                    }else{  //todo 存离线消息
+
+                    }
+                }
+                break;
+            default:
+        }
 
     }
 
@@ -109,7 +143,8 @@ class Im{
         }
         switch ($data["type"]){
             case "push":
-                break;
+                $this->pushTask($serv,$data["data"]);break;
+            default:
         }
     }
 
@@ -136,9 +171,18 @@ class Im{
         }
         $data=array(
             "type"  =>  "push",
-            "data"  =>  $msg
+            "data"  =>  ["fds"=>$fds,"data"=>$msg]
         );
         $serv->task($data);
+    }
+
+    private function pushTask(swoole_server $serv,$data){
+        if(isset($data["fds"]) || !count($data["fds"])){
+            return;
+        }
+        foreach ($data["fds"] as $fd){
+            $serv->push($fd,$data["data"]);
+        }
     }
 
 

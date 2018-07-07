@@ -53,6 +53,7 @@ class User{
         return $this->groups;
     }
 
+    //暂存用户实例
     public function save(Redis $redis)
     {
         $redis->hSet("online_user",$this->id,swoole_serialize::pack($this));
@@ -79,6 +80,24 @@ class User{
             $user=swoole_serialize::unpack($user);
         }
         return $user;
+    }
+
+    //生成单人聊天消息
+    public function talkMsg($msg)
+    {
+        $data=array(
+            "from"  =>  $this->id,
+            "type"  =>  "user",
+            "msg"   =>  $msg,
+            "time"  =>  date("Y/m/d H:i")
+        );
+        return $data;
+    }
+
+    //用户是否在线
+    static public function isOnline(Redis $redis,$id)
+    {
+        return $redis->hGet("online_user",$id)?true:false;
     }
 
 
