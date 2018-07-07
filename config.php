@@ -12,13 +12,14 @@ return array(
     "port"          =>  9501,
     //swoole配置
     "swoole"    =>  array(
-        "reactor_num"   =>  2,
-        "worker_num"    =>  4,
-        "max_conn"      =>  200,
-        "daemonize"     =>  false,
-        "dispatch_mode" =>  5,
-//        "log_file"      =>  "/var/log/test-im/im.log",
-//        "log_level"     =>  4
+        "reactor_num"       =>  2,
+        "worker_num"        =>  4,
+        "task_worker_num "  =>  4,
+        "max_conn"          =>  200,
+        "daemonize"         =>  false,
+        "dispatch_mode"     =>  5,
+//        "log_file"        =>  "/var/log/test-im/im.log",
+//        "log_level"       =>  4
     ),
     //redis配置
     "redis"     =>  array(
