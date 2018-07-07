@@ -54,7 +54,6 @@ class Group{
 
     public function save(Redis $redis)
     {
-        var_dump($this->onlineFd);
         $redis->hSet("group_info",$this->id,swoole_serialize::pack($this));
     }
 
@@ -70,6 +69,7 @@ class Group{
     //群成员上线
     public function online(Redis $redis,$fd)
     {
+        var_dump($this->onlineFd);
         array_push($this->onlineFd,$fd);
         $this->save($redis);
     }
