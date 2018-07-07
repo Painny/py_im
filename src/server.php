@@ -8,7 +8,8 @@
 /**
  * 所有在线用户: online_user(hash key) id => $user实例
  * 用户id和fd映射关系： fd_user(hash key) fd => id
- * 群组已登录成员: group_{id}(set key)  [fd1,fd3]集合
+ * 群组信息: group_info(hash key) id => $group实例
+ *
  *********************************************************************
  *推送消息格式:["type":"msg","data":"xx","code":0,"msg":"xx"]
  *
@@ -44,6 +45,7 @@ class Im{
         $this->server->on("close",array($this,"onClose"));
 
         $this->server->start();
+        $this->server->task(["type"=>"initGroups","data"=>null]);
     }
 
     public function onStart()
@@ -66,6 +68,7 @@ class Im{
             require_once __DIR__."/helper.php";
             require_once __DIR__."/db.php";
             require_once __DIR__."/user.php";
+            require_once __DIR__."/group.php";
 
             //每个工作进程分配单独数据库和redis连接
             $dsn='mysql:dbname='.config("mysql.database").';host='.config("mysql.host").';port='.
@@ -145,8 +148,13 @@ class Im{
             return;
         }
         switch ($data["type"]){
-            case "push":
+            case "push":  //推送群消息
                 $this->pushTask($serv,$data["data"]);break;
+            case "initGroups":  //初始化所有群
+                foreach (Group::allGroups() as $id){
+                    $group=new Group($serv->db,$id);
+                    $group->save($serv->redis);
+                }
             default:
         }
     }

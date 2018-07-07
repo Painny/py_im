@@ -11,6 +11,7 @@ class Group{
     private $name;
     private $userCount;
     private $userList;
+    private $onlineFd;
 
     public function __construct(DataBase $db,$id)
     {
@@ -26,9 +27,12 @@ class Group{
         }
         $this->name=$info["name"];
         $this->userCount=$info["userCount"];
+        $this->onlineFd=[];
+        $this->userList();
     }
 
-    public function userList(DataBase $db){
+    public function userList(DataBase $db)
+    {
         if($this->userList!==null){
             return $this->userList;
         }
@@ -46,6 +50,17 @@ class Group{
             "msg"   =>  $msg,
             "time"  =>  date("Y/m/d H:i")
         );
+    }
+
+    public function save(Redis $redis)
+    {
+        $redis->hSet("group_info",$this->id,swoole_serialize::pack($this));
+    }
+
+    static public function allGroups(DataBase $db)
+    {
+        $list=$db->table("groups")->where("state=0")->field("id")->get();
+        return $list;
     }
 
 }
