@@ -63,4 +63,21 @@ class Group{
         return $list;
     }
 
+    //群成员上线
+    public function online(Redis $redis,$fd)
+    {
+        array_push($this->onlineFd,$fd);
+        $this->save($redis);
+    }
+
+    //群成员下线
+    public function offline(Redis $redis,$fd)
+    {
+        $index=array_search($fd,$this->onlineFd);
+        if($index!==false){
+            array_splice($this->onlineFd,$index,1);
+            $this->save($redis);
+        }
+    }
+
 }
