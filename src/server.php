@@ -123,9 +123,9 @@ class Im{
                         $this->push($serv,[$fromFd],$errInfo);
                         return;
                     }
-                    if(User::isOnline($serv->redis,$user)){
+                    if(User::isOnline($serv->redis,$msg["data"]["to"])){
                         $response=makeMsg("msg",$user->talkMsg($msg["data"]["msg"]));
-                        $this->push($serv,[($user->info())["fd"]],$response);
+                        $this->push($serv,[$msg["data"]["to"]],$response);
                     }else{  //todo 存离线消息
 
                     }
