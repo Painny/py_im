@@ -133,7 +133,7 @@ class Im{
                         $response=makeMsg("msg",$user->talkMsg($msg["data"]["msg"]));
                         $this->push($serv,[($toUser->info())["id"]],$response);
                     }else{  //存离线消息
-                        $user->offlineMsg($serv->db,$msg["data"]["to"],$msg["data"]["msg"]);
+                        $user->SaveOfflineMsg($serv->db,$msg["data"]["to"],$msg["data"]["msg"]);
                     }
                 }else{  //群组消息
 

@@ -100,7 +100,7 @@ class User{
     }
 
     //暂存离线消息
-    public function offlineMsg(DataBase $db,$toUserId,$msg)
+    public function SaveOfflineMsg(DataBase $db,$toUserId,$msg)
     {
         $db->table("offline_msg")->insert(array(
             "fromUser"  =>  $this->id,
@@ -108,6 +108,22 @@ class User{
             "msg"       =>  $msg,
             "time"      =>  time()
         ));
+    }
+
+    public function getOfflineMsg(DataBase $db)
+    {
+        $msg=$db->table("offline_msg")->where("toUser=? and state=0",[$this->id])->field("fromUser,msg,time")->
+        order("time")->get();
+        $data=array();
+        foreach ($msg as $key => $val){
+            $data[$key]=array(
+                "from"  =>  $val->fromUser,
+                "type"  =>  "user",
+                "msg"   =>  $val->msg,
+                "time"  =>  date("Y/m/d H:i",$val->time)
+            );
+        }
+        return $data;
     }
 
 
