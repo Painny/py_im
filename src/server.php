@@ -154,8 +154,8 @@ class Im{
                 $this->pushTask($serv,$data["data"]);
                 break;
             case "initGroups":  //初始化所有群
-                foreach (Group::allGroups($serv->db) as $id){
-                    $group=new Group($serv->db,$id);
+                foreach (Group::allGroups($serv->db) as $group){
+                    $group=new Group($serv->db,$group["id"]);
                     $group->save($serv->redis);
                 }
                 break;
