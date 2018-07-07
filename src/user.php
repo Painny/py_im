@@ -110,6 +110,7 @@ class User{
         ));
     }
 
+    //获取离线消息
     public function getOfflineMsg(DataBase $db)
     {
         $msg=$db->table("offline_msg")->where("toUser=? and state=0",[$this->id])->field("fromUser,msg,time")->
@@ -126,6 +127,24 @@ class User{
         return $data;
     }
 
+    //上线的一些处理
+    public function online(DataBase $db,Redis $redis)
+    {
+        foreach ($this->getGroups($db) as $val){
+            $group=new Group($db,$val["id"]);
+            $group->online($redis,$this->fd);
+            echo count($group->onlineFd());
+        }
+    }
+
+    //下线的一些处理
+    public function offline(DataBase $db,Redis $redis)
+    {
+        foreach ($this->getGroups($db) as $val){
+            $group=new Group($db,$val["id"]);
+            $group->offline($redis,$this->fd);
+        }
+    }
 
 
 

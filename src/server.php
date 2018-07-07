@@ -162,7 +162,12 @@ class Im{
                 Group::initAll($serv->db,$serv->redis);
                 break;
             case "online":  //上线的一些处理
-
+                $user=User::getByFd($serv->redis,$data["data"]["fd"]);
+                $user->online($serv->db,$serv->redis);
+                break;
+            case "offline":  //下线的一些处理
+                $user=User::getByFd($serv->redis,$data["data"]["fd"]);
+                $user->offline($serv->db,$serv->redis);
                 break;
             default:
         }

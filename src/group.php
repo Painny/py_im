@@ -83,4 +83,9 @@ class Group{
         }
     }
 
+    //在线成员fd
+    public function onlineFd(){
+        return $this->onlineFd;
+    }
+
 }
