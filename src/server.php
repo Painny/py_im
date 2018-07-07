@@ -113,6 +113,11 @@ class Im{
 
         //暂存用户实例
         $user->save($serv->redis);
+        //上线处理
+        $serv->task(array(
+            "type"  =>  "online",
+            "data"  =>  ["fd"=>$req->fd]
+        ));
     }
 
     public function onMessage(swoole_server $serv, swoole_websocket_frame $frame)
