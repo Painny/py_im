@@ -102,7 +102,12 @@ class Im{
 
         //返回基本信息，好友列表，群列表
         $user=new User($req->fd,$data);
-        $response=array("info"=>$user->info(),"friends"=>$user->getFriends($serv->db),"groups"=>$user->getGroups($serv->db));
+        $response=array(
+            "info"      =>  $user->info(),
+            "friends"   =>  $user->getFriends($serv->db),
+            "groups"    =>  $user->getGroups($serv->db),
+            "msg"       =>  $user->getOfflineMsg($serv->db)
+        );
         $response=makeMsg("connect",$response);
         $this->push($serv,[$req->fd],$response);
 
