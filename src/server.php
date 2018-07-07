@@ -144,6 +144,7 @@ class Im{
 
     public function onTask(swoole_server $serv,$task_id,$src_worker_id,$data)
     {
+        echo 111;
         if(!is_array($data) || isset($data["type"])){
             return;
         }
