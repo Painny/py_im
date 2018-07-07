@@ -146,6 +146,7 @@ class Im{
 
     public function onTask(swoole_server $serv,$task_id,$src_worker_id,$data)
     {
+        var_dump($data);
         if(!is_array($data) || isset($data["type"])){
             return;
         }
@@ -153,7 +154,6 @@ class Im{
             case "push":  //推送群消息
                 $this->pushTask($serv,$data["data"]);break;
             case "initGroups":  //初始化所有群
-                var_dump(Group::allGroups());
                 foreach (Group::allGroups() as $id){
                     $group=new Group($serv->db,$id);
                     $group->save($serv->redis);
