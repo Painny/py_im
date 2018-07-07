@@ -132,6 +132,7 @@ class User{
     {
         foreach ($this->getGroups($db) as $val){
             $group=new Group($db,$val["id"]);
+            var_dump($group->onlineFd());
             $group->online($redis,$this->fd);
         }
     }
