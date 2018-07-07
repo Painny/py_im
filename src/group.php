@@ -69,8 +69,7 @@ class Group{
     //群成员上线
     public function online(Redis $redis,$fd)
     {
-        var_dump($this->onlineFd);
-        array_push($this->onlineFd,$fd);
+        var_dump(array_push($this->onlineFd,$fd));
         $this->save($redis);
     }
 
