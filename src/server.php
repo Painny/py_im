@@ -124,11 +124,14 @@ class Im{
                         return;
                     }
                     if(User::isOnline($serv->redis,$msg["data"]["to"])){
+                        $toUser=User::getById($serv->redis,$msg["data"]["to"]);
                         $response=makeMsg("msg",$user->talkMsg($msg["data"]["msg"]));
-                        $this->push($serv,[$msg["data"]["to"]],$response);
-                    }else{  //todo 存离线消息
-
+                        $this->push($serv,[($toUser->info())["id"]],$response);
+                    }else{  //存离线消息
+                        $user->offlineMsg($serv->db,$msg["data"]["to"],$msg["data"]["msg"]);
                     }
+                }else{  //群组消息
+
                 }
                 break;
             default:
@@ -176,7 +179,8 @@ class Im{
         $serv->task($data);
     }
 
-    private function pushTask(swoole_server $serv,$data){
+    private function pushTask(swoole_server $serv,$data)
+    {
         if(isset($data["fds"]) || !count($data["fds"])){
             return;
         }
