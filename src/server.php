@@ -150,12 +150,12 @@ class Im{
         if(!is_array($data) || isset($data["type"])){
             return;
         }
+        echo $data["type"];
         switch ($data["type"]){
             case "push":  //推送群消息
                 $this->pushTask($serv,$data["data"]);
                 break;
             case "initGroups":  //初始化所有群
-                echo 1111;
                 foreach (Group::allGroups() as $id){
                     $group=new Group($serv->db,$id);
                     $group->save($serv->redis);
