@@ -45,7 +45,6 @@ class Im{
         $this->server->on("close",array($this,"onClose"));
 
         $this->server->start();
-        $this->server->task(["type"=>"initGroups","data"=>null]);
     }
 
     public function onStart()
@@ -82,6 +81,9 @@ class Im{
             $redis->select(config("redis.db_index"));
 
             $serv->redis=$redis;
+            if($worker_id==0){
+                $serv->task(["type"=>"initGroups","data"=>null]);
+            }
         }catch (Exception $e){
             echo $e->getMessage();exit;
         }
@@ -144,7 +146,6 @@ class Im{
 
     public function onTask(swoole_server $serv,$task_id,$src_worker_id,$data)
     {
-        echo 111;
         if(!is_array($data) || isset($data["type"])){
             return;
         }
