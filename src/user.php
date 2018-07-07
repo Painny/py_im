@@ -131,8 +131,7 @@ class User{
     public function online(DataBase $db,Redis $redis)
     {
         foreach ($this->getGroups($db) as $val){
-            $group=new Group($db,$val["id"]);
-            var_dump($group->onlineFd());
+            $group=Group::getById($redis,$val["id"]);
             $group->online($redis,$this->fd);
         }
     }
@@ -141,7 +140,7 @@ class User{
     public function offline(DataBase $db,Redis $redis)
     {
         foreach ($this->getGroups($db) as $val){
-            $group=new Group($db,$val["id"]);
+            $group=Group::getById($redis,$val["id"]);
             $group->offline($redis,$this->fd);
         }
     }

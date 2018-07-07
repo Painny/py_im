@@ -19,7 +19,7 @@ class Group{
         $this->init($db,$id);
     }
 
-    public function init(DataBase $db,$id)
+    private function init(DataBase $db,$id)
     {
         $info=$db->table("groups")->where("id=? and state=0",[$id])->field("name,userCount")->find();
         if(!isset($info["name"])){
@@ -66,11 +66,21 @@ class Group{
         }
     }
 
+    static public function getById(Redis $redis,$id)
+    {
+        $group=$redis->hGet("group_info",$id);
+        if($group){
+            $group=swoole_serialize::unpack($group);
+        }
+        return $group;
+    }
+
     //群成员上线
     public function online(Redis $redis,$fd)
     {
         array_push($this->onlineFd,$fd);
         $this->save($redis);
+        var_dump($this->onlineFd);
     }
 
     //群成员下线
