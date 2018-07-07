@@ -159,10 +159,10 @@ class Im{
                 $this->pushTask($serv,$data["data"]);
                 break;
             case "initGroups":  //初始化所有群
-                foreach (Group::allGroups($serv->db) as $group){
-                    $group=new Group($serv->db,$group["id"]);
-                    $group->save($serv->redis);
-                }
+                Group::initAll($serv->db,$serv->redis);
+                break;
+            case "online":  //上线的一些处理
+
                 break;
             default:
         }

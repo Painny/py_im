@@ -57,10 +57,13 @@ class Group{
         $redis->hSet("group_info",$this->id,swoole_serialize::pack($this));
     }
 
-    static public function allGroups(DataBase $db)
+    static public function initAll(DataBase $db,Redis $redis)
     {
         $list=$db->table("groups")->where("state=0")->field("id")->get();
-        return $list;
+        foreach ($list as $group){
+            $group=new self($db,$group["id"]);
+            $group->save($redis);
+        }
     }
 
     //群成员上线
