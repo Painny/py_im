@@ -28,7 +28,7 @@ class Group{
         $this->name=$info["name"];
         $this->userCount=$info["userCount"];
         $this->onlineFd=[];
-        $this->userList();
+        $this->userList($db);
     }
 
     public function userList(DataBase $db)
