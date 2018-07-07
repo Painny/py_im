@@ -85,13 +85,12 @@ class User{
     //生成单人聊天消息
     public function talkMsg($msg)
     {
-        $data=array(
+        return array(
             "from"  =>  $this->id,
             "type"  =>  "user",
             "msg"   =>  $msg,
             "time"  =>  date("Y/m/d H:i")
         );
-        return $data;
     }
 
     //用户是否在线
