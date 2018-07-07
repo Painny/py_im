@@ -100,6 +100,27 @@ class DataBase{
         return $result[0]["count"];
     }
 
+    public function insert($arr)
+    {
+        $fields=array_keys($arr);
+        $values=array();
+        foreach ($fields as $index => $key){
+            $fields[$index]="`{$key}`";
+            $values[$index]="?";
+        }
+        $sql="INSERT INTO ".$this->table."(".implode(",",$fields).") VALUES(".implode(",",$values).")";
+        $this->sqlInfo["sql"]=$sql;
+        $this->sqlInfo["bind"]=array_values($arr);
+        $this->sql=$sql;
+        $stm=$this->pdo->prepare($sql);
+        foreach (array_values($arr) as $key => $val){
+            $stm->bindValue($key+1,$val);
+        }
+        $stm->execute();
+        $this->reset();
+        return $stm->rowCount();
+    }
+
     private function makeSql()
     {
         $sql="SELECT".$this->field."FROM ".$this->table.$this->join.$this->whereStr.$this->order.$this->limit;
