@@ -80,7 +80,6 @@ class Group{
     {
         array_push($this->onlineFd,$fd);
         $this->save($redis);
-        var_dump($this->onlineFd);
     }
 
     //群成员下线
