@@ -152,6 +152,7 @@ class Im{
                 $this->pushTask($serv,$data["data"]);break;
             case "initGroups":  //初始化所有群
                 foreach (Group::allGroups() as $id){
+                    echo $id;
                     $group=new Group($serv->db,$id);
                     $group->save($serv->redis);
                 }
