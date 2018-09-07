@@ -25,7 +25,7 @@
  *
  *
  * {"type":"msg","data":{"type":"user","to":2,"msg":"xx"}}
- *
+ * {"type":"msg","data":{"type":"group","to":1,"msg":"群消息"}}
  */
 
 //主服务文件
@@ -230,6 +230,7 @@ class Im{
 
     private function pushTask(swoole_server $serv,$data)
     {
+        var_dump($data);
         if(isset($data["fds"]) || !count($data["fds"])){
             return;
         }
