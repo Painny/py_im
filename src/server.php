@@ -145,6 +145,7 @@ class Im{
                         $toUser=User::getById($serv->redis,$msg["data"]["to"]);
                         $response=makeMsg("msg",$user->talkMsg($msg["data"]["msg"]));
                         $this->push($serv,[$toUser->info("id")],$response);
+                        return;
                     }else{  //存离线消息
                         $user->SaveOfflineMsg($serv->db,$msg["data"]["to"],$msg["data"]["msg"]);
                     }
@@ -156,6 +157,7 @@ class Im{
                         return;
                     }
                     $onlineFds=$toGroup->onlineFd();
+                    var_dump($onlineFds);
                     $response=makeMsg("msg",$toGroup->talkMsg($msg["data"]["msg"],$user->info("id")));
                     $this->push($serv,$onlineFds,$response);
                 }
