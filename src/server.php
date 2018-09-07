@@ -23,6 +23,9 @@
  * 聊天消息格式:type => msg, data => ["type":"user|group","to":user_id|group_id,"msg":"xx"]
  * 操作请求格式:type => act, data => ["act":"xx","data":"xx"]
  *
+ *
+ * {"type":"msg","data":{"type":"user","to":2,"msg":"xx"}}
+ *
  */
 
 //主服务文件
@@ -131,13 +134,13 @@ class Im{
         }
         switch ($msg["type"]){
             case "msg":
+                $user=User::getByFd($serv->redis,$fromFd);
+                if(!$user){
+                    $errInfo=makeMsg("error",null,1,"发送者用户实例不存在");
+                    $this->push($serv,[$fromFd],$errInfo);
+                    return;
+                }
                 if($msg["data"]["type"]=="user"){  //单人消息
-                    $user=User::getByFd($serv->redis,$fromFd);
-                    if(!$user){
-                        $errInfo=makeMsg("error",null,1,"发送者用户实例不存在");
-                        $this->push($serv,[$fromFd],$errInfo);
-                        return;
-                    }
                     if(User::isOnline($serv->redis,$msg["data"]["to"])){
                         $toUser=User::getById($serv->redis,$msg["data"]["to"]);
                         $response=makeMsg("msg",$user->talkMsg($msg["data"]["msg"]));
@@ -185,6 +188,12 @@ class Im{
 
     public function onClose(swoole_server $serv, $fd, $reactorId)
     {
+        //下线处理
+        $serv->task(array(
+            "type"  =>  "offline",
+            "data"  =>  ["fd"=>$fd]
+        ));
+        //清除内存数据
         $user=User::getByFd($serv->redis,$fd);
         if($user){
             $serv->redis->hDel("online_user",($user->info())["id"]);
@@ -195,6 +204,9 @@ class Im{
 
     private function push(swoole_server $serv,$fds,$msg)
     {
+        if(!count($fds)){
+            return;
+        }
         if(count($fds)==1){
             $serv->push($fds[0],$msg);
             return;
