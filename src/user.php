@@ -23,8 +23,11 @@ class User{
 
     }
 
-    public function info()
+    public function info($key=null)
     {
+        if($key){
+            return $this->$key;
+        }
         return array(
             "id"        =>  $this->id,
             "fd"        =>  $this->fd,

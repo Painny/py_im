@@ -144,12 +144,20 @@ class Im{
                     if(User::isOnline($serv->redis,$msg["data"]["to"])){
                         $toUser=User::getById($serv->redis,$msg["data"]["to"]);
                         $response=makeMsg("msg",$user->talkMsg($msg["data"]["msg"]));
-                        $this->push($serv,[($toUser->info())["id"]],$response);
+                        $this->push($serv,[$toUser->info("id")],$response);
                     }else{  //存离线消息
                         $user->SaveOfflineMsg($serv->db,$msg["data"]["to"],$msg["data"]["msg"]);
                     }
                 }else{  //群组消息
-
+                    $toGroup=Group::getById($serv->redis,$msg["data"]["to"]);
+                    if(!$toGroup){
+                        $errInfo=makeMsg("error",null,1,"群实例不存在");
+                        $this->push($serv,[$fromFd],$errInfo);
+                        return;
+                    }
+                    $onlineFds=$toGroup->onlineFd();
+                    $response=makeMsg("msg",$toGroup->talkMsg($msg["data"]["msg"],$user->info("id")));
+                    $this->push($serv,$onlineFds,$response);
                 }
                 break;
             default:
@@ -196,7 +204,7 @@ class Im{
         //清除内存数据
         $user=User::getByFd($serv->redis,$fd);
         if($user){
-            $serv->redis->hDel("online_user",($user->info())["id"]);
+            $serv->redis->hDel("online_user",$user->info("id"));
             unset($user);
         }
         $serv->redis->hDel("fd_user",$fd);
