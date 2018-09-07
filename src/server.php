@@ -229,11 +229,11 @@ class Im{
 
     private function pushTask(swoole_server $serv,$data)
     {
-        if(isset($data["fds"]) || !count($data["fds"])){
+        if(!isset($data["fds"]) || !count($data["fds"])){
             return;
         }
         foreach ($data["fds"] as $fd){
-            var_dump($serv->push($fd,$data["data"]));
+            $serv->push($fd,$data["data"]);
         }
     }
 
