@@ -157,7 +157,6 @@ class Im{
                         return;
                     }
                     $onlineFds=$toGroup->onlineFd();
-                    var_dump($onlineFds);
                     $response=makeMsg("msg",$toGroup->talkMsg($msg["data"]["msg"],$user->info("id")));
                     $this->push($serv,$onlineFds,$response);
                 }
@@ -230,12 +229,11 @@ class Im{
 
     private function pushTask(swoole_server $serv,$data)
     {
-        var_dump($data);
         if(isset($data["fds"]) || !count($data["fds"])){
             return;
         }
         foreach ($data["fds"] as $fd){
-            $serv->push($fd,$data["data"]);
+            var_dump($serv->push($fd,$data["data"]));
         }
     }
 
