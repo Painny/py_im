@@ -121,6 +121,22 @@ class DataBase{
         return $stm->rowCount();
     }
 
+    public function update($arr)
+    {
+        $updateKeys=array_fill_keys(array_keys($arr),"?");
+        $sql="UPDATE ".$this->table." SET ".implode(",",$updateKeys).$this->whereStr;
+        $this->sqlInfo["sql"]=$sql;
+        $this->sqlInfo["bind"]=array_values($arr);
+        $this->sql=$sql;
+        $stm=$this->pdo->prepare($sql);
+        foreach (array_values($arr) as $key => $val){
+            $stm->bindValue($key+1,$val);
+        }
+        $stm->execute();
+        $this->reset();
+        return $stm->rowCount();
+    }
+
     private function makeSql()
     {
         $sql="SELECT".$this->field."FROM ".$this->table.$this->join.$this->whereStr.$this->order.$this->limit;
