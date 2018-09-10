@@ -147,7 +147,7 @@ class DataBase{
 
     public function max($field)
     {
-        $this->field=" MAX({$field}) as max";
+        $this->field=" MAX({$field}) as max ";
         $this->makeSql();
         $result=$this->execute();
         if($result===false){
@@ -158,7 +158,7 @@ class DataBase{
 
     public function min($field)
     {
-        $this->field=" MIN({$field}) as min";
+        $this->field=" MIN({$field}) as min ";
         $this->makeSql();
         $result=$this->execute();
         if($result===false){
@@ -169,7 +169,7 @@ class DataBase{
 
     public function avg($field)
     {
-        $this->field=" AVG({$field}) as avg";
+        $this->field=" AVG({$field}) as avg ";
         $this->makeSql();
         $result=$this->execute();
         if($result===false){
