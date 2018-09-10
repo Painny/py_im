@@ -174,6 +174,7 @@ class Im{
                 switch ($act){
                     case "searchGroup":
                         $groups=Group::search($serv->db,$msg["data"]["data"]);
+                        var_dump($groups);
                         if(!$groups){
                             $errInfo=makeMsg("error",null,1,"暂无搜索结果");
                             $this->push($serv,[$fromFd],$errInfo);

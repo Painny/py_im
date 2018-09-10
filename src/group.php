@@ -23,7 +23,6 @@ class Group{
     public static function search(DataBase $db,$name)
     {
         $info=$db->table("groups")->where("state=0 and name like '%?%'",[$name])->field("id,name,userCount")->get();
-        var_dump($db->lastSql());
         return $info;
     }
 
