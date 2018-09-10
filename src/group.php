@@ -22,7 +22,8 @@ class Group{
     //搜索群
     public static function search(DataBase $db,$name)
     {
-        $info=$db->table("groups")->where("state=0 and name like '%?%'",[$name])->field("id,name,userCount")->get();
+        $name="%{$name}%";
+        $info=$db->table("groups")->where("state=0 and name like ?",[$name])->field("id,name,userCount")->get();
         return $info;
     }
 
