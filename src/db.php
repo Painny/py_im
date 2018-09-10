@@ -123,15 +123,23 @@ class DataBase{
 
     public function update($arr)
     {
-        $updateKeys=array_fill_keys(array_keys($arr),"?");
-        $sql="UPDATE ".$this->table." SET ".implode(",",$updateKeys).$this->whereStr;
+        $update="";
+        foreach (array_keys($arr) as $index => $value){
+            if($index+1!=count(array_keys($arr))){
+                $update.=$value."=?,";
+            }else{
+                $update.=$value."=?";
+            }
+        }
+        $sql="UPDATE ".$this->table." SET ".$update.$this->whereStr;
         $this->sqlInfo["sql"]=$sql;
-        $this->sqlInfo["bind"]=array_values($arr);
+        $this->sqlInfo["bind"]=array_merge(array_values($arr),$this->whereValue);
         $this->sql=$sql;
         $stm=$this->pdo->prepare($sql);
-        foreach (array_values($arr) as $key => $val){
+        foreach ($this->sqlInfo["bind"] as $key => $val){
             $stm->bindValue($key+1,$val);
         }
+
         $stm->execute();
         $this->reset();
         return $stm->rowCount();
