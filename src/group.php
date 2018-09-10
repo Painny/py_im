@@ -19,6 +19,19 @@ class Group{
         $this->init($db,$id);
     }
 
+    public function info($key=null)
+    {
+        if($key){
+            return $this->$key;
+        }
+        return array(
+            "id"        => $this->id,    
+            "name"      => $this->name,
+            "userCount" => $this->userCount,
+            "userList"  => $this->userList,
+        );
+    }
+
     //搜索群
     public static function search(DataBase $db,$name)
     {
