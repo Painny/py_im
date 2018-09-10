@@ -145,14 +145,14 @@ class Im{
             $this->push($serv,[$fromFd],$errInfo);
             return;
         }
+        $user=User::getByFd($serv->redis,$fromFd);
+        if(!$user){
+            $errInfo=makeMsg("error",null,1,"发送者用户实例不存在");
+            $this->push($serv,[$fromFd],$errInfo);
+            return;
+        }
         switch ($msg["type"]){
             case "msg":
-                $user=User::getByFd($serv->redis,$fromFd);
-                if(!$user){
-                    $errInfo=makeMsg("error",null,1,"发送者用户实例不存在");
-                    $this->push($serv,[$fromFd],$errInfo);
-                    return;
-                }
                 if($msg["data"]["type"]=="user"){  //单人消息
                     if(User::isOnline($serv->redis,$msg["data"]["to"])){
                         $toUser=User::getById($serv->redis,$msg["data"]["to"]);
@@ -197,6 +197,18 @@ class Im{
                         $this->push($serv,[$fromFd],$response);
                         break;
                     case "joinGroup":
+                        $group=Group::getById($serv->redis,$msg["data"]["data"]);
+                        if(!$group){
+                            $errInfo=makeMsg("error",null,1,"群不存在");
+                            $this->push($serv,[$fromFd],$errInfo);
+                            return;
+                        }
+                        $result=$group->join($serv->db,$serv->redis,$user->info());
+                        if(!$result){
+                            $errInfo=makeMsg("error",null,1,"加入群失败");
+                            $this->push($serv,[$fromFd],$errInfo);
+                            return;
+                        }
                         break;
                     case "addUser":
                         break;
