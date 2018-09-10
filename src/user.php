@@ -155,6 +155,26 @@ class User{
         }
     }
 
+    //加群
+    public function joinGroup(DataBase $db,Redis $redis,Group $group)
+    {
+        $userInfo=$this->info();
+        unset($userInfo["fd"]);
+        $result=$group->join($db,$redis,$userInfo);
+        if($result){
+            $groupInfo=$group->info();
+            unset($groupInfo["userList"]);
+            $this->groups[]=$groupInfo;
+        }
+        return $result;
+    }
+
+    //添加好友  todo
+    public function addUser(DataBase $db,Redis $redis,$userId)
+    {
+
+    }
+
 
 
 }

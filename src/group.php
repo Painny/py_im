@@ -25,7 +25,7 @@ class Group{
             return $this->$key;
         }
         return array(
-            "id"        => $this->id,    
+            "id"        => $this->id,
             "name"      => $this->name,
             "userCount" => $this->userCount,
             "userList"  => $this->userList,

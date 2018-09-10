@@ -203,7 +203,7 @@ class Im{
                             $this->push($serv,[$fromFd],$errInfo);
                             return;
                         }
-                        $result=$group->join($serv->db,$serv->redis,$user->info());
+                        $result=$user->join($serv->db,$serv->redis,$group);
                         if(!$result){
                             $errInfo=makeMsg("error",null,1,"加入群失败");
                             $this->push($serv,[$fromFd],$errInfo);
