@@ -19,6 +19,13 @@ class Group{
         $this->init($db,$id);
     }
 
+    //搜索群
+    public static function search(DataBase $db,$name)
+    {
+        $info=$db->table("groups")->where("state=0 and name like '%?%'",[$name])->field("id,name,userCount")->get();
+        return $info;
+    }
+
     private function init(DataBase $db,$id)
     {
         $info=$db->table("groups")->where("id=? and state=0",[$id])->field("name,userCount")->find();

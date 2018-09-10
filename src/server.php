@@ -26,6 +26,13 @@
  *
  * {"type":"msg","data":{"type":"user","to":2,"msg":"xx"}}
  * {"type":"msg","data":{"type":"group","to":1,"msg":"群消息"}}
+ *
+ * act:  searchGroup 搜索群
+ *       searchUser  搜索人
+ *       joinGroup   加入群
+ *       addUser     添加好友
+ *       quitGroup   退出群
+ *
  */
 
 //主服务文件
@@ -159,6 +166,30 @@ class Im{
                     $response=makeMsg("msg",$toGroup->talkMsg($msg["data"]["msg"],$user->info("id")));
                     $this->push($serv,$onlineFds,$response);
                 }
+                break;
+            case "act":
+                $act=$msg["data"]["act"];
+                switch ($act){
+                    case "searchGroup":
+                        $groups=Group::search($serv->db,$msg["data"]["data"]);
+                        if(!$groups){
+                            $errInfo=makeMsg("error",null,1,"暂无搜索结果");
+                            $this->push($serv,[$fromFd],$errInfo);
+                            return;
+                        }
+                        $response=makeMsg("msg",$groups);
+                        $this->push($serv,[$fromFd],$response);
+                        break;
+                    case "searchUser":
+                        break;
+                    case "joinGroup":
+                        break;
+                    case "addUser":
+                        break;
+                    case "quitGroup":
+                        break;
+                }
+
                 break;
             default:
         }
