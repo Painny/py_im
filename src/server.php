@@ -209,6 +209,8 @@ class Im{
                             $this->push($serv,[$fromFd],$errInfo);
                             return;
                         }
+                        $response=makeMsg("msg",$result);
+                        $this->push($serv,[$fromFd],$response);
                         break;
                     case "addUser":
                         break;
