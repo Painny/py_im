@@ -34,6 +34,10 @@
  *       quitGroup   退出群
  *
  * {"type":"act","data":{"act":"searchGroup","data":"xx"}}
+ * {"type":"act","data":{"act":"searchUser","data":"xx"}}
+ * {"type":"act","data":{"act":"joinGroup","data":1}}
+ * {"type":"act","data":{"act":"addUser","data":1}}
+ * {"type":"act","data":{"act":"quitGroup","data":1}}
  *
  */
 

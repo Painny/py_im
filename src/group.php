@@ -105,4 +105,30 @@ class Group{
         return $this->onlineFd;
     }
 
+    //加入群
+    public function join(DataBase $db,Redis $redis,$userInfo)
+    {
+        $fd=$userInfo["fd"];
+        unset($userInfo["fd"]);
+        //是否已加入
+        if(in_array($userInfo,$this->userList)){
+            return true;
+        }
+        $res=$db->table("group_user")->insert([
+            "groupId"   =>  $this->id,
+            "userId"    =>  $userInfo["id"]
+        ]);
+        if(!$res){
+            return false;
+        }
+        $db->table("groups")->where("id=?",[$this->id])->update([
+            "userCount" =>  $this->userCount+1
+        ]);
+        //更新群成员列表
+        $this->userList[]=$userInfo;
+        //上线
+        $this->online($redis,$fd);
+        return true;
+    }
+
 }
