@@ -36,6 +36,13 @@ class User{
         );
     }
 
+    public static function search(DataBase $db,$name)
+    {
+        $name="%{$name}%";
+        $info=$db->table("user")->where("nickname like ?",[$name])->get();
+        return $info;
+    }
+
     public function getFriends(DataBase $db)
     {
         if(isset($this->friends)){

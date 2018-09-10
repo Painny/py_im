@@ -183,6 +183,14 @@ class Im{
                         $this->push($serv,[$fromFd],$response);
                         break;
                     case "searchUser":
+                        $users=User::search($serv->db,$msg["data"]["data"]);
+                        if(!$users){
+                            $errInfo=makeMsg("error",null,1,"暂无搜索结果");
+                            $this->push($serv,[$fromFd],$errInfo);
+                            return;
+                        }
+                        $response=makeMsg("msg",$users);
+                        $this->push($serv,[$fromFd],$response);
                         break;
                     case "joinGroup":
                         break;
