@@ -184,7 +184,8 @@ class DataBase{
         return $this->sqlInfo;
     }
 
-    private function reset(){
+    private function reset()
+    {
         $this->table=null;
         $this->whereStr="";
         $this->whereValue=[];
