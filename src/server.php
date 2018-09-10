@@ -33,6 +33,8 @@
  *       addUser     添加好友
  *       quitGroup   退出群
  *
+ * {"type":"act","data":{"act":"searchGroup","data":"xx"}}
+ *
  */
 
 //主服务文件
