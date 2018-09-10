@@ -91,7 +91,7 @@ class DataBase{
 
     public function count()
     {
-        $this->field=" count(1) as count ";
+        $this->field=" COUNT(1) as count ";
         $this->makeSql();
         $result=$this->execute();
         if($result===false){
@@ -143,6 +143,39 @@ class DataBase{
         $stm->execute();
         $this->reset();
         return $stm->rowCount();
+    }
+
+    public function max($field)
+    {
+        $this->field=" MAX({$field}) as max";
+        $this->makeSql();
+        $result=$this->execute();
+        if($result===false){
+            return 0;
+        }
+        return $result[0]["max"];
+    }
+
+    public function min($field)
+    {
+        $this->field=" MIN({$field}) as min";
+        $this->makeSql();
+        $result=$this->execute();
+        if($result===false){
+            return 0;
+        }
+        return $result[0]["min"];
+    }
+
+    public function avg($field)
+    {
+        $this->field=" AVG({$field}) as avg";
+        $this->makeSql();
+        $result=$this->execute();
+        if($result===false){
+            return 0;
+        }
+        return $result[0]["avg"];
     }
 
     private function makeSql()
