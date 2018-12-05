@@ -182,8 +182,20 @@ class User{
     //添加好友
     public function addUser(DataBase $db,Redis $redis,$userId)
     {
+        //获取用户信息
         $user=self::getById($db,$userId);
         if(!$user){
+            return false;
+        }
+        //是否已添加
+        if(in_array($user,$this->friends)){
+            return false;
+        }
+        $result=$db->table("friend")->insert([
+            "userId"    =>  $this->id,
+            "friendId"  =>  $userId
+        ]);
+        if(!$result){
             return false;
         }
         $this->friends[]=$user;
