@@ -168,6 +168,7 @@ class User{
             unset($groupInfo["userList"]);
             $this->groups[]=$groupInfo;
         }
+        $this->save($redis);
         return $result;
     }
 
@@ -178,7 +179,7 @@ class User{
         return $user;
     }
 
-    //添加好友  todo
+    //添加好友
     public function addUser(DataBase $db,Redis $redis,$userId)
     {
         $user=self::getById($db,$userId);
@@ -186,6 +187,7 @@ class User{
             return false;
         }
         $this->friends[]=$user;
+        $this->save($redis);
         return true;
     }
 
