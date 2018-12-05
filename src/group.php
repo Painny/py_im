@@ -139,14 +139,37 @@ class Group{
         ]);
         //更新群成员列表
         $this->userList[]=$userInfo;
+        $this->userCount++;
         //上线
         $this->online($redis,$fd);
         return true;
     }
 
-    public function quit()
+    //退出群
+    public function quit(DataBase $db,Redis $redis,$userInfo)
     {
-
+        $fd=$userInfo["fd"];
+        unset($userInfo["fd"]);
+        //是否是群成员
+        if(!in_array($userInfo,$this->userList)){
+            return true;
+        }
+        $res=$db->table("group_user")->where("groupId = ? and userId = ?",[$this->id,$userInfo["id"]])->update([
+           "state"  =>  1
+        ]);
+        if(!$res){
+            return false;
+        }
+        $db->table("groups")->where("id = ?",[$this->id])->update([
+            "userCount" =>  $this->userCount-1
+        ]);
+        //更新成员列表
+        $index=array_search($userInfo,$this->userList);
+        array_splice($this->userList,$index,1);
+        $this->userCount--;
+        //从在线fd列表里删除
+        $this->offline($redis,$fd);
+        return true;
     }
 
 }
