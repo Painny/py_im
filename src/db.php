@@ -180,24 +180,17 @@ class DataBase{
 
     public function incr($field,$num=1)
     {
-        $sql="UPDATE ".$this->table." SET ".$field."=".$field."+".$num." ".$this->whereStr;
-
-        $this->sqlInfo["sql"]=$sql;
-        $this->sqlInfo["bind"]=$this->whereValue;
-        $this->sql=$sql;
-        $stm=$this->pdo->prepare($sql);
-        foreach ($this->sqlInfo["bind"] as $key => $val){
-            $stm->bindValue($key+1,$val);
-        }
-
-        $stm->execute();
-        $this->reset();
-        return $stm->rowCount();
+       return $this->incrOrDecr("+",$field,$num);
     }
 
     public function decr($field,$num=1)
     {
-        $sql="UPDATE ".$this->table." SET ".$field."=".$field."-".$num." ".$this->whereStr;
+        return $this->incrOrDecr("-",$field,$num);
+    }
+
+    private function incrOrDecr($operate,$field,$num)
+    {
+        $sql="UPDATE ".$this->table." SET ".$field."=".$field.$operate.$num." ".$this->whereStr;
 
         $this->sqlInfo["sql"]=$sql;
         $this->sqlInfo["bind"]=$this->whereValue;
