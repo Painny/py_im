@@ -145,7 +145,7 @@ class Im{
             $this->push($serv,[$fromFd],$errInfo);
             return;
         }
-        $user=User::getByFd($serv->redis,$fromFd);
+        $user=User::getOnlineByFd($serv->redis,$fromFd);
         if(!$user){
             $errInfo=makeMsg("error",null,1,"发送者用户实例不存在");
             $this->push($serv,[$fromFd],$errInfo);
@@ -155,7 +155,7 @@ class Im{
             case "msg":
                 if($msg["data"]["type"]=="user"){  //单人消息
                     if(User::isOnline($serv->redis,$msg["data"]["to"])){
-                        $toUser=User::getById($serv->redis,$msg["data"]["to"]);
+                        $toUser=User::getOnlineById($serv->redis,$msg["data"]["to"]);
                         $response=makeMsg("msg",$user->talkMsg($msg["data"]["msg"]));
                         $this->push($serv,[$toUser->info("id")],$response);
                     }else{  //存离线消息
@@ -203,7 +203,7 @@ class Im{
                             $this->push($serv,[$fromFd],$errInfo);
                             return;
                         }
-                        $result=$user->join($serv->db,$serv->redis,$group);
+                        $result=$user->joinGroup($serv->db,$serv->redis,$group);
                         if(!$result){
                             $errInfo=makeMsg("error",null,1,"加入群失败");
                             $this->push($serv,[$fromFd],$errInfo);
@@ -237,11 +237,11 @@ class Im{
                 Group::initAll($serv->db,$serv->redis);
                 break;
             case "online":  //上线的一些处理
-                $user=User::getByFd($serv->redis,$data["data"]["fd"]);
+                $user=User::getOnlineByFd($serv->redis,$data["data"]["fd"]);
                 $user->online($serv->db,$serv->redis);
                 break;
             case "offline":  //下线的一些处理
-                $user=User::getByFd($serv->redis,$data["data"]["fd"]);
+                $user=User::getOnlineByFd($serv->redis,$data["data"]["fd"]);
                 $user->offline($serv->db,$serv->redis);
                 break;
             default:
@@ -261,7 +261,7 @@ class Im{
             "data"  =>  ["fd"=>$fd]
         ));
         //清除内存数据
-        $user=User::getByFd($serv->redis,$fd);
+        $user=User::getOnlineByFd($serv->redis,$fd);
         if($user){
             $serv->redis->hDel("online_user",$user->info("id"));
             unset($user);

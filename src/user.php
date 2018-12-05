@@ -70,7 +70,8 @@ class User{
         $redis->hSet("fd_user",$this->fd,$this->id);
     }
 
-    static public function getById(Redis $redis,$id)
+    //通过用户id获取在线用户实例
+    static public function getOnlineById(Redis $redis,$id)
     {
         $user=$redis->hGet("online_user",$id);
         if($user){
@@ -79,7 +80,8 @@ class User{
         return $user;
     }
 
-    static public function getByFd(Redis $redis,$fd)
+    //通过用户连接fd获取在线用户实例
+    static public function getOnlineByFd(Redis $redis,$fd)
     {
         $id=$redis->hGet("fd_user",$fd);
         if(!$id){
@@ -169,10 +171,22 @@ class User{
         return $result;
     }
 
+    //通过id获取用户信息
+    static public function getById(DataBase $db,$userId)
+    {
+        $user=$db->table("user")->where("id = ?",[$userId])->field("id,nickname,icon")->find();
+        return $user;
+    }
+
     //添加好友  todo
     public function addUser(DataBase $db,Redis $redis,$userId)
     {
-
+        $user=self::getById($db,$userId);
+        if(!$user){
+            return false;
+        }
+        $this->friends[]=$user;
+        return true;
     }
 
 
