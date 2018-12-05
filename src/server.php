@@ -223,6 +223,20 @@ class Im{
                         $this->push($serv,[$fromFd],$response);
                         break;
                     case "quitGroup":
+                        $group=Group::getById($serv->redis,$msg["data"]["data"]);
+                        if(!$group){
+                            $errInfo=makeMsg("error",null,1,"群不存在");
+                            $this->push($serv,[$fromFd],$errInfo);
+                            return;
+                        }
+                        $result=$user->quitGroup($serv->db,$serv->redis,$group);
+                        if(!$result){
+                            $errInfo=makeMsg("error",null,1,"退出群失败");
+                            $this->push($serv,[$fromFd],$errInfo);
+                            return;
+                        }
+                        $response=makeMsg("msg",$result);
+                        $this->push($serv,[$fromFd],$response);
                         break;
                 }
 
