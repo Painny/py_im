@@ -213,6 +213,14 @@ class Im{
                         $this->push($serv,[$fromFd],$response);
                         break;
                     case "addUser":
+                        $result=$user->addUser($serv->db,$serv->redis,$msg["data"]["data"]);
+                        if(!$result){
+                            $errInfo=makeMsg("error",null,1,"添加好友失败");
+                            $this->push($serv,[$fromFd],$errInfo);
+                            return;
+                        }
+                        $response=makeMsg("msg",$result);
+                        $this->push($serv,[$fromFd],$response);
                         break;
                     case "quitGroup":
                         break;
