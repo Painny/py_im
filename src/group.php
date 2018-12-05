@@ -134,9 +134,7 @@ class Group{
         if(!$res){
             return false;
         }
-        $db->table("groups")->where("id=?",[$this->id])->update([
-            "userCount" =>  $this->userCount+1
-        ]);
+        $db->table("groups")->where("id=?",[$this->id])->incr("userCount");
         //更新群成员列表
         $this->userList[]=$userInfo;
         $this->userCount++;
@@ -160,9 +158,7 @@ class Group{
         if(!$res){
             return false;
         }
-        $db->table("groups")->where("id = ?",[$this->id])->update([
-            "userCount" =>  $this->userCount-1
-        ]);
+        $db->table("groups")->where("id = ?",[$this->id])->decr("userCount");
         //更新成员列表
         $index=array_search($userInfo,$this->userList);
         array_splice($this->userList,$index,1);
