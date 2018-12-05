@@ -178,6 +178,40 @@ class DataBase{
         return $result[0]["avg"];
     }
 
+    public function incr($field,$num=1)
+    {
+        $sql="UPDATE ".$this->table." SET ".$field."=".$field."+".$num." ".$this->whereStr;
+
+        $this->sqlInfo["sql"]=$sql;
+        $this->sqlInfo["bind"]=$this->whereValue;
+        $this->sql=$sql;
+        $stm=$this->pdo->prepare($sql);
+        foreach ($this->sqlInfo["bind"] as $key => $val){
+            $stm->bindValue($key+1,$val);
+        }
+
+        $stm->execute();
+        $this->reset();
+        return $stm->rowCount();
+    }
+
+    public function decr($field,$num=1)
+    {
+        $sql="UPDATE ".$this->table." SET ".$field."=".$field."-".$num." ".$this->whereStr;
+
+        $this->sqlInfo["sql"]=$sql;
+        $this->sqlInfo["bind"]=$this->whereValue;
+        $this->sql=$sql;
+        $stm=$this->pdo->prepare($sql);
+        foreach ($this->sqlInfo["bind"] as $key => $val){
+            $stm->bindValue($key+1,$val);
+        }
+
+        $stm->execute();
+        $this->reset();
+        return $stm->rowCount();
+    }
+
     private function makeSql()
     {
         $sql="SELECT".$this->field."FROM ".$this->table.$this->join.$this->whereStr.$this->order.$this->limit;
