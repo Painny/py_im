@@ -144,4 +144,9 @@ class Group{
         return true;
     }
 
+    public function quit()
+    {
+
+    }
+
 }
