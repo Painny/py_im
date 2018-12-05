@@ -161,12 +161,28 @@ class User{
     public function joinGroup(DataBase $db,Redis $redis,Group $group)
     {
         $userInfo=$this->info();
-        unset($userInfo["fd"]);
         $result=$group->join($db,$redis,$userInfo);
         if($result){
             $groupInfo=$group->info();
             unset($groupInfo["userList"]);
+            //更新群列表信息
             $this->groups[]=$groupInfo;
+        }
+        $this->save($redis);
+        return $result;
+    }
+
+    //退群
+    public function quitGroup(DataBase $db,Redis $redis,Group $group)
+    {
+        $userInfo=$this->info();
+        $result=$group->quit($db,$redis,$userInfo);
+        if($result){
+            $groupInfo=$group->info();
+            unset($groupInfo["userList"]);
+            //更新群列表信息
+            $index=array_search($groupInfo,$this->groups);
+            array_splice($this->groups,$index,1);
         }
         $this->save($redis);
         return $result;
