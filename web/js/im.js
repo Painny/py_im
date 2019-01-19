@@ -1,8 +1,11 @@
 
 var Im={
+
+    ws:null,
     userId:null,
     token:null,
-    ws:null,
+    friends:null,
+    groups:null,
 
     init:function (token) {
         this.token=token;
@@ -13,6 +16,7 @@ var Im={
             alert("请登陆账号");
             return;
         }
+
         this.ws=new WebSocket("ws://120.79.61.205:9501/?token="+this.token);
         this.ws.onopen=this.onOpen;
         this.ws.onmessage=this.onMessage;
@@ -37,18 +41,26 @@ var Im={
         var data=event.data;
         console.log(data);
         data=JSON.parse(data);
+
         switch (data.type){
             case "connect":
                 Im.selfInfo(data.data);
+                break;
+            case "msg"    :
+                Im.showMsg(data.data);
         }
     },
 
     onClose:function () {
         console.log("断开连接...");
         $('#msg-box').css("border-color","red");
+
         Im.ws=null;
         Im.token=null;
         Im.userId=null;
+        Im.friends=null;
+        Im.groups=null;
+
         $('#user-img').attr("src",null);
         $('#user-nickname').text("");
     },
@@ -62,6 +74,47 @@ var Im={
         $('#user-img').attr("src",data.info.icon);
         $('#user-nickname').text(data.info.nickname);
         this.userId=data.info.id;
+        this.friends=data.info.friends;
+        this.groups=data.info.groups;
+    },
+
+    //发送聊天信息
+    sendMsg:function (type,id,msg) {
+        var data={
+            type:"msg",
+            data:{
+                "type":type,
+                "to":id,
+                "msg":msg
+            }
+        };
+        this.send(data);
+    },
+
+    //展示聊天信息
+    showMsg:function (data) {
+        //私聊信息
+        if(data.type == "user"){
+            var user=this.getUser(data.data.from);
+            if(!user){
+                user={
+                    id:data.data.from,
+                    nickname:"未知用户",
+                    icon:""
+                }
+            }
+            
+        }
+    },
+
+    //通过用户id获取本地用户信息
+    getUser:function (id) {
+        for(var i in this.friends){
+            if(this.friends[i].id == id){
+                return this.friends[i];
+            }
+        }
+        return false;
     }
 
 };
