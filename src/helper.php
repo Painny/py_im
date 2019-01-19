@@ -9,10 +9,10 @@
 //读取配置(支持多级读取)
 function config($key)
 {
-    static $CONFIG;
-    if(!isset($CONFIG)){
-        $CONFIG=require_once __DIR__."/../config.php";
-    }
+    global $CONFIG;
+//    if(!isset($CONFIG)){
+//        $CONFIG=require_once __DIR__."/../config.php";
+//    }
     if(strpos($key,".")===false){
         return $CONFIG[$key];
     }
