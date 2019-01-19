@@ -157,7 +157,7 @@ class Im{
                     if(User::isOnline($serv->redis,$msg["data"]["to"])){
                         $toUser=User::getOnlineById($serv->redis,$msg["data"]["to"]);
                         $response=makeMsg("msg",$user->talkMsg($msg["data"]["msg"]));
-                        $this->push($serv,[$toUser->info("id")],$response);
+                        $this->push($serv,[$toUser->info("fd")],$response);
                     }else{  //存离线消息
                         $user->SaveOfflineMsg($serv->db,$msg["data"]["to"],$msg["data"]["msg"]);
                     }
