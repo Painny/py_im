@@ -1,0 +1,22 @@
+{
+    "name": "pengyu/py_im",
+    "description": "a im based on swoole",
+    "type": "project",
+    "authors": [
+        {
+            "name": "pengyu",
+            "email": "917103429@qq.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "classmap": [],
+        "files": [
+            "src/helper.php",
+            "src/group.php",
+            "src/db.php",
+            "src/server.php",
+            "src/user.php"
+        ]
+    }
+}
