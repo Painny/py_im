@@ -2,9 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
     <title>py_im</title>
 </head>
+<style>
+    body{
+        margin: 10px;
+    }
+    div{
+        margin: 10px auto;
+    }
+    #msg-box{
+        width: 85%;
+        height: 400px;
+        border: solid dimgrey 1px;
+    }
+    #button-box{
+        text-align: center;
+    }
+</style>
 <body>
+    <div id="msg-box">
 
+    </div>
+    <div id="button-box">
+        <input type="text" id="msg-input" />
+        <button id="msg-button">发送</button>
+    </div>
 </body>
+<script src="js/jquery.min.js"></script>
+<script src="js/im.js"></script>
 </html>
