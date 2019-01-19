@@ -6,30 +6,91 @@
     <title>py_im</title>
 </head>
 <style>
-    body{
-        margin: 10px;
+    html{
+        font-size: 10px;
     }
-    div{
-        margin: 10px auto;
+    body{
+        margin: 1rem;
+    }
+    body>div{
+        margin: 1rem auto;
     }
     #msg-box{
-        width: 85%;
-        height: 400px;
+        width: 96%;
+        height: 35rem;
         border: solid red 1px;
+        overflow-y: scroll;
     }
     #button-box,#user-box{
         text-align: center;
     }
     #user-img{
-        width: 100px;
-        height: 100px;
+        width: 10rem;
+        height: 10rem;
         border: solid black 1px;
         display: inline-block;
+    }
+    .msg-box-line{
+        height: 5rem;
+        /*border: solid gray 1px;*/
+        margin-top:1rem;
+        vertical-align: middle;
+        display: table;
+        width: 100%;
+    }
+    .msg-user-icon{
+        display: table-cell;
+        vertical-align: middle;
+        width: 4rem;
+    }
+    .msg-user-icon img{
+        width: 100%;
+        display: block;
+        border-radius: 50%;
+    }
+    .msg-user-message{
+        text-align: left;
+        padding: 0 0.4rem;
+        display: inline-block;
+    }
+    .msg-user-nickname{
+        color: #8e8585;
+        font-size: 1.2rem;
+    }
+    .msg-content{
+        font-size: 1.4rem;
+        color: #352a2a;
+        padding-top: 2px;
+    }
+    .msg-box-right{
+        text-align: right;
+    }
+    .msg-box-left{
+        text-align: left;
     }
 </style>
 <body>
     <div id="msg-box">
+        <div class="msg-box-left msg-box-line">
+            <div class="msg-user-icon">
+                <img src="http://image.cnhsqk.com/icon/15361407541179.jpg?x-oss-process=style/thumb" />
+            </div>
+            <div class="msg-user-message">
+                <div class="msg-user-nickname">孙悟空</div>
+                <div class="msg-content">首先我们先要创建一个div元素以及另外一个包含图片的div元素</div>
+            </div>
+            <div class="msg-user-icon"></div>
+        </div>
 
+        <div class="msg-box-right msg-box-line">
+            <div class="msg-user-icon"></div>
+            <div class="msg-user-message">
+                <div class="msg-content">首先我们先要创建首先我创建创建一个div元素以及另外一个包含图片的素以及另外一个包含图片的div元素</div>
+            </div>
+            <div class="msg-user-icon">
+                <img src="http://image.cnhsqk.com/icon/15361407541179.jpg?x-oss-process=style/thumb" />
+            </div>
+        </div>
     </div>
 
     <div id="button-box">
