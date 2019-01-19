@@ -57,6 +57,7 @@
         color: #8e8585;
         font-size: 1.2rem;
     }
+
     .msg-content{
         font-size: 1.4rem;
         color: #352a2a;
@@ -71,26 +72,27 @@
 </style>
 <body>
     <div id="msg-box">
-        <div class="msg-box-left msg-box-line">
-            <div class="msg-user-icon">
-                <img src="http://image.cnhsqk.com/icon/15361407541179.jpg?x-oss-process=style/thumb" />
-            </div>
-            <div class="msg-user-message">
-                <div class="msg-user-nickname">孙悟空</div>
-                <div class="msg-content">首先我们先要创建一个div元素以及另外一个包含图片的div元素</div>
-            </div>
-            <div class="msg-user-icon"></div>
-        </div>
+        <!--<div class="msg-box-left msg-box-line">-->
+            <!--<div class="msg-user-icon">-->
+                <!--<img src="http://image.cnhsqk.com/icon/15361407541179.jpg?x-oss-process=style/thumb" />-->
+            <!--</div>-->
+            <!--<div class="msg-user-message">-->
+                <!--<div class="msg-user-nickname">孙悟空</div>-->
+                <!--<div class="msg-content">首先我们先要创建一个div元素以及另外一个包含图片的div元素</div>-->
+            <!--</div>-->
+            <!--<div class="msg-user-icon"></div>-->
+        <!--</div>-->
 
-        <div class="msg-box-right msg-box-line">
-            <div class="msg-user-icon"></div>
-            <div class="msg-user-message">
-                <div class="msg-content">首先我们先要创建首先我创建创建一个div元素以及另外一个包含图片的素以及另外一个包含图片的div元素</div>
-            </div>
-            <div class="msg-user-icon">
-                <img src="http://image.cnhsqk.com/icon/15361407541179.jpg?x-oss-process=style/thumb" />
-            </div>
-        </div>
+        <!--<div class="msg-box-right msg-box-line">-->
+            <!--<div class="msg-user-icon"></div>-->
+            <!--<div class="msg-user-message">-->
+                <!--<div class="msg-user-nickname">&nbsp;</div>-->
+                <!--<div class="msg-content">首先我们先</div>-->
+            <!--</div>-->
+            <!--<div class="msg-user-icon">-->
+                <!--<img src="http://image.cnhsqk.com/icon/15361407541179.jpg?x-oss-process=style/thumb" />-->
+            <!--</div>-->
+        <!--</div>-->
     </div>
 
     <div id="button-box">
@@ -123,6 +125,17 @@
             Im.close();
         });
 
+        //发送
+        $('#msg-button').click(function () {
+            var id;
+            if(Im.info.id == 1){
+                id=2;
+            }else{
+                id=1;
+            }
+            var msg=$('#msg-input').val();
+            Im.sendMsg("user",id,msg);
+        });
 
     });
 </script>
