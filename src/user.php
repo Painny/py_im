@@ -48,9 +48,15 @@ class User{
         if(isset($this->friends)){
             return $this->friends;
         }
-        $this->friends=$db->table("friend")->join("user","friendId","=","id")
+        $tmpA=$db->table("friend")->join("user","friendId","=","id")
             ->field("user.id as id,nickname,icon")
-            ->where("(userId=? or friendId=?) and state=0",[$this->id,$this->id])->get();
+            ->where("userId=? and state=0",[$this->id])->get();
+
+        $tmpB=$db->table("friend")->join("user","userId","=","id")
+            ->field("user.id as id,nickname,icon")
+            ->where("friendId=? and state=0",[$this->id])->get();
+
+        $this->friends=array_merge($tmpA,$tmpB);
         return $this->friends;
     }
 
