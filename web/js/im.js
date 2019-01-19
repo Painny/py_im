@@ -2,7 +2,7 @@
 var Im={
 
     ws:null,
-    userId:null,
+    info:null,
     token:null,
     friends:null,
     groups:null,
@@ -73,9 +73,9 @@ var Im={
     selfInfo:function (data) {
         $('#user-img').attr("src",data.info.icon);
         $('#user-nickname').text(data.info.nickname);
-        this.userId=data.info.id;
-        this.friends=data.info.friends;
-        this.groups=data.info.groups;
+        this.info=data.info;
+        this.friends=data.friends;
+        this.groups=data.groups;
     },
 
     //发送聊天信息
@@ -89,22 +89,60 @@ var Im={
             }
         };
         this.send(data);
+
+        var info={
+            msg:msg,
+            nickname:this.info.nickname,
+            icon:this.info.icon
+        };
+        this.msgDom(info,true);
     },
 
     //展示聊天信息
     showMsg:function (data) {
+        var info={
+            msg:data.msg,
+            nickname:"未知用户",
+            icon:""
+        };
         //私聊信息
         if(data.type == "user"){
-            var user=this.getUser(data.data.from);
-            if(!user){
-                user={
-                    id:data.data.from,
-                    nickname:"未知用户",
-                    icon:""
-                }
+            var user=this.getUser(data.from);
+            if(user){
+                info.nickname=user.nickname;
+                info.icon=user.icon;
             }
-            
         }
+        this.msgDom(info,false);
+    },
+
+    //生成聊天信息dom
+    msgDom:function (data,self) {
+        var dom;
+        if(self){
+            dom='<div class="msg-box-right msg-box-line">' +
+                '            <div class="msg-user-icon"></div>' +
+                '            <div class="msg-user-message">' +
+                '                <div class="msg-user-nickname">&nbsp;</div>' +
+                '                <div class="msg-content">'+data.msg+'</div>' +
+                '            </div>' +
+                '            <div class="msg-user-icon">' +
+                '                <img src="'+data.icon+'" />' +
+                '           </div>' +
+                '        </div>';
+        }else{
+            dom='<div class="msg-box-left msg-box-line">' +
+                '            <div class="msg-user-icon">' +
+                '                <img src="'+data.icon+'" />' +
+                '            </div>' +
+                '            <div class="msg-user-message">' +
+                '                <div class="msg-user-nickname">'+data.nickname+'</div>' +
+                '                <div class="msg-content">'+data.msg+'</div>' +
+                '            </div>' +
+                '            <div class="msg-user-icon"></div>' +
+                '        </div>';
+        }
+        $('#msg-box').append(dom);
     },
 
     //通过用户id获取本地用户信息
