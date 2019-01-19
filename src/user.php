@@ -48,8 +48,9 @@ class User{
         if(isset($this->friends)){
             return $this->friends;
         }
-        $this->friends=$db->table("friend")->join("user","friendId","=","id")->
-            field("user.id as id,nickname,icon")->where("userId=? and state=0",[$this->id])->get();
+        $this->friends=$db->table("friend")->join("user","friendId","=","id")
+            ->field("user.id as id,nickname,icon")
+            ->where("(userId=? or friendId=?) and state=0",[$this->id,$this->id])->get();
         return $this->friends;
     }
 
