@@ -97,7 +97,7 @@ class Im{
                 $serv->task(["type"=>"initGroups","data"=>null]);
             }
         }catch (Exception $e){
-            echo $e->getMessage();exit;
+            echo $e->getMessage();
         }
 
     }
