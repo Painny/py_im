@@ -15,6 +15,8 @@ class DataBase{
     private $order="";
     private $limit="";
     private $join="";
+    private $groupBy="";
+    private $having="";
     private $sqlInfo;
     private $errInfo;
 
@@ -25,6 +27,7 @@ class DataBase{
 
     public function table($table)
     {
+        $this->reset();
         $this->table=$table;
         return $this;
     }
@@ -133,7 +136,6 @@ class DataBase{
         }
 
         $stm->execute();
-        $this->reset();
 
         return $stm->rowCount();
     }
@@ -159,7 +161,6 @@ class DataBase{
         }
 
         $stm->execute();
-        $this->reset();
 
         return $stm->rowCount();
     }
@@ -226,21 +227,34 @@ class DataBase{
         }
 
         $stm->execute();
-        $this->reset();
+
         return $stm->rowCount();
     }
 
     public function sql($sql,$bind=[])
     {
+        $this->reset();
         $this->sqlInfo["sql"]=$sql;
         $this->sqlInfo["bind"]=$bind;
 
         return $this->execute();
     }
 
+    public function groupBy($group)
+    {
+        $this->groupBy=" GROUP BY {$group} ";
+        return $this;
+    }
+
+    public function having($having)
+    {
+        $this->having=" HAVING {$having} ";
+        return $this;
+    }
+
     private function makeSql()
     {
-        $sql="SELECT".$this->field."FROM ".$this->table.$this->join.$this->whereStr.$this->order.$this->limit;
+        $sql="SELECT".$this->field."FROM ".$this->table.$this->join.$this->whereStr.$this->groupBy.$this->having.$this->order.$this->limit;
 
         $this->sqlInfo["sql"]=$sql;
         $this->sqlInfo["bind"]=$this->whereValue;
@@ -266,7 +280,6 @@ class DataBase{
             $this->errInfo["code"]=$e->getCode();
             $this->errInfo["info"]=$e->getMessage();
         }
-        $this->reset();
 
         return $result;
     }
