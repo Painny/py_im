@@ -25,7 +25,7 @@ return array(
     "redis"     =>  array(
         "host"    =>  "127.0.0.1",
         "port"    =>  6379,
-        "pwd"     =>  "1993918py",
+        "pwd"     =>  "",
         "db_index"=>  3
     ),
     //mysql配置
@@ -33,7 +33,7 @@ return array(
         "host"       =>  "127.0.0.1",
         "port"       =>  3306,
         "user"       =>  "root",
-        "pwd"        =>  "1993918py",
+        "pwd"        =>  "root",
         "database"   =>  "im",
         "charset"    =>  "utf8"
     ),
