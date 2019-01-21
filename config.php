@@ -25,7 +25,7 @@ return array(
     "redis"     =>  array(
         "host"    =>  "127.0.0.1",
         "port"    =>  6379,
-        "pwd"     =>  "",
+        "pwd"     =>  "1",
         "db_index"=>  3
     ),
     //mysql配置
