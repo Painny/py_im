@@ -10,9 +10,7 @@
 function config($key)
 {
     global $CONFIG;
-//    if(!isset($CONFIG)){
-//        $CONFIG=require_once __DIR__."/../config.php";
-//    }
+
     if(strpos($key,".")===false){
         return $CONFIG[$key];
     }
