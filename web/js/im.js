@@ -1,3 +1,4 @@
+var FriendsCache={};
 
 var Im={
 
@@ -60,6 +61,7 @@ var Im={
         Im.userId=null;
         Im.friends=null;
         Im.groups=null;
+        FriendsCache={};
 
         $('#user-img').attr("src",null);
         $('#user-nickname').text("");
@@ -95,6 +97,7 @@ var Im={
             nickname:this.info.nickname,
             icon:this.info.icon
         };
+
         this.msgDom(info,true);
     },
 
@@ -105,6 +108,7 @@ var Im={
             nickname:"未知用户",
             icon:""
         };
+
         //私聊信息
         if(data.type == "user"){
             var user=this.getUser(data.from);
@@ -113,6 +117,7 @@ var Im={
                 info.icon=user.icon;
             }
         }
+
         this.msgDom(info,false);
     },
 
@@ -147,11 +152,17 @@ var Im={
 
     //通过用户id获取本地用户信息
     getUser:function (id) {
+        if(FriendsCache.hasOwnProperty(id)){
+            return FriendsCache[id];
+        }
+
         for(var i in this.friends){
             if(this.friends[i].id == id){
+                FriendsCache[i]=this.friends[i];
                 return this.friends[i];
             }
         }
+
         return false;
     }
 
